@@ -2,9 +2,10 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import AppRouter from './router';
 
 function App() {
-  return <h1 className='text-5xl'>Hello World</h1>
+  return <AppRouter />;
 }
 
 export default App
