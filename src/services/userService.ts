@@ -19,3 +19,9 @@ export const register = async(name: string, email: string, password: string) => 
     });
     return response.data;
 };
+
+export const getUserProfile = async() => {
+    const response = await axios.get(`${baseURL}/user/profile`);
+    return response.data;
+};
+

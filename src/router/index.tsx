@@ -2,8 +2,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginPage from '../page/Login';
 import RegisterPage from '../page/Register';
 import HomePage from '../page/HomePage';
-import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
+import MainLayout from '../layouts/mainLayout';
+import AboutPage from '../page/AboutPage';
 
 const AppRouter = () => {
     return (
@@ -26,9 +27,17 @@ const AppRouter = () => {
                 <Route 
                     path='/' 
                     element={
-                        <ProtectedRoute>
+                        <MainLayout>
                             <HomePage />
-                        </ProtectedRoute>
+                        </MainLayout>
+                    }
+                />
+                <Route 
+                    path='/about' 
+                    element={
+                        <MainLayout>
+                            <AboutPage />
+                        </MainLayout>
                     }
                 />
             </Routes>

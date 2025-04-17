@@ -5,6 +5,15 @@ interface AuthState {
     token: string | null;
 };
 
+interface User {
+    id: number;
+    email: string;
+    name: string;
+    avatar_url: string;
+    phone_number: string;
+    address: string;
+}
+
 const initialState: AuthState = {
     user: null,
     token: localStorage.getItem("AccessToken"),

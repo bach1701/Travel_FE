@@ -4,7 +4,16 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        inter: ['Inter', 'sans-serif'],
+        nothing_you_could_do: ['"Nothing You Could Do"'],
+        rubik: ['Rubik']
+      },
+      colors: {
+        primary: '#FF6A00'
+      }
+    },
   },
   plugins: [],
 }
