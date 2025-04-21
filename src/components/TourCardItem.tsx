@@ -3,14 +3,14 @@ import { Tour } from '@/types/Tour';
 import { FaClock } from 'react-icons/fa';
 import { FaPlane } from 'react-icons/fa6';
 import { FaPaperPlane } from 'react-icons/fa';
-import { Card, CardContent } from './ui/card';
-import { Badge } from './ui/badge';
+import { Card, CardContent } from './ui/CardItem';
+import { Badge } from './ui/BadgeItem';
 
 interface TourCardProps {
   tour: Tour;
 }
 
-const TourCard: React.FC<TourCardProps> = ({ tour }) => {
+const TourCardItem: React.FC<TourCardProps> = ({ tour }) => {
   const coverImage = tour.images?.[0]?.image_url || '/placeholder.jpg';
 
   return (
@@ -52,4 +52,4 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
   );
 };
 
-export default TourCard;
+export default TourCardItem;

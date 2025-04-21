@@ -1,4 +1,4 @@
-import TourCard from '@/components/TourCard';
+import TourCardItem from '@/components/TourCardItem';
 import { Pagination, TourResponse } from '@/types/Pagination';
 import { Tour } from '@/types/Tour';
 import axios from 'axios';
@@ -42,7 +42,7 @@ const PopularTour = () => {
                 <div className='flex flex-wrap justify-center gap-10 px-4'>
                     {tours.map((tour) => (
                         <div key={tour.tour_id} className='w-full sm:w-[calc(50%-16px)] lg:w-[calc(33.333%-16px)] xl:w-[350px]'>
-                            <TourCard tour={tour} />
+                            <TourCardItem tour={tour} />
                         </div>
                     ))}
                 </div>
