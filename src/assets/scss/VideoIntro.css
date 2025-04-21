@@ -1,0 +1,20 @@
+.play-button {
+    margin-top: 20px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%; 
+    background-color: #FF6A00; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease; 
+}
+
+.play-button:hover {
+    transform: scale(1.1); 
+}
+
+.play-button:active {
+    transform: scale(0.9); 
+}

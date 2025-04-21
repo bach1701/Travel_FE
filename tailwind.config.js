@@ -11,7 +11,8 @@ module.exports = {
         rubik: ['Rubik']
       },
       colors: {
-        primary: '#FF6A00'
+        primary: '#FF6A00',
+        bgprimary: '#FFF5E6'
       }
     },
   },

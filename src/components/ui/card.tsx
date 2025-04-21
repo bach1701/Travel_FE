@@ -5,5 +5,5 @@ export const Card = ({ children, className } : React.HTMLAttributes<HTMLDivEleme
 };
 
 export const CardContent = ({ children, className }: React.HTMLAttributes<HTMLDivElement>) => {
-  return <div className={`p-4 ${className}`}>{children}</div>;
+  return <div className={` ${className}`}>{children}</div>;
 };
