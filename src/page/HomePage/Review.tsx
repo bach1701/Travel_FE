@@ -1,4 +1,3 @@
-import React from 'react';
 import img from '../../assets/image/home/golden-bridge.svg';
 import ava from '../../assets/image/home/ava-default.svg';
 import StarRatings from 'react-star-ratings';

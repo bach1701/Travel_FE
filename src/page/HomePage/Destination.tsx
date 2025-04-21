@@ -1,4 +1,3 @@
-import React from 'react';
 import north from '../../assets/image/home/destination/mapileng.jpg'
 import central from '../../assets/image/home/destination/phu-yen.webp'
 import south from '../../assets/image/home/destination/mt3.webp'

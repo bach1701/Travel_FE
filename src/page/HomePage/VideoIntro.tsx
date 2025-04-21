@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import bg from '../../assets/image/home/bg_video.png';
 import { FaPlay } from 'react-icons/fa';
 import Modal from 'react-modal';

@@ -1,4 +1,3 @@
-import React from 'react';
 import icPlane from '../../assets/image/home/icon-service/plane.svg'
 import icPerson from '../../assets/image/home/icon-service/person.svg'
 import icBus from '../../assets/image/home/icon-service/bus.svg'

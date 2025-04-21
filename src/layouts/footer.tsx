@@ -1,4 +1,3 @@
-import React from 'react';
 import logo from '../assets/image/footer/logo.svg';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaPaperPlane } from 'react-icons/fa';
 

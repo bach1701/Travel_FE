@@ -2,11 +2,11 @@ import TourCard from '@/components/TourCard';
 import { Pagination, TourResponse } from '@/types/Pagination';
 import { Tour } from '@/types/Tour';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const PopularTour = () => {
     const[tours, setTours] = useState<Tour[]>([]);
-    const [pagination, setPagination] = useState<Pagination | null>(null);
+    const [, setPagination] = useState<Pagination | null>(null);
     const[loading, setLoading] = useState(true);
     const baseURL = import.meta.env.VITE_API_URL;
 
@@ -17,6 +17,7 @@ const PopularTour = () => {
                 const { tours, pagination } = response.data;
                 setTours(tours.slice(0, 3));
                 setPagination(pagination);
+                console.log(pagination);
             }
             catch (err) {
                 console.error('Lỗi khi lấy danh sách tour:', err);

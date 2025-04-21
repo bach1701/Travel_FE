@@ -1,4 +1,3 @@
-import React from 'react';
 import destination from '../../assets/image/home/icon-extra-intro/Destina.svg'
 import partner from '../../assets/image/home/icon-extra-intro/Partner.svg'
 import human from '../../assets/image/home/icon-extra-intro/Human.svg'
