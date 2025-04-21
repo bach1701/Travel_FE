@@ -1,7 +1,5 @@
 import React from 'react';
 import { Tour } from '@/types/Tour';
-import { Card, CardContent } from '../components/ui/Card';
-import { Badge } from '../components/ui/Badge';
 import { FaClock } from 'react-icons/fa';
 import { FaPlane } from 'react-icons/fa6';
 import { FaPaperPlane } from 'react-icons/fa';
