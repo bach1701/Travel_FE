@@ -3,8 +3,8 @@ import { Tour } from '@/types/Tour';
 import { FaClock } from 'react-icons/fa';
 import { FaPlane } from 'react-icons/fa6';
 import { FaPaperPlane } from 'react-icons/fa';
-import { Card, CardContent } from './ui/Card';
-import { Badge } from './ui/Badge';
+import { Card, CardContent } from './ui/card';
+import { Badge } from './ui/badge';
 
 interface TourCardProps {
   tour: Tour;
