@@ -4,7 +4,7 @@ import { Card, CardContent } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { FaClock } from 'react-icons/fa';
 import { FaPlane } from 'react-icons/fa6';
-import { FaClipboardCheck } from 'react-icons/fa';
+import { FaPaperPlane } from 'react-icons/fa';
 
 interface TourCardProps {
   tour: Tour;
@@ -44,7 +44,7 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
       <div className='flex justify-center mb-2'>
         <button className='bg-orange-500 uppercase font-bold text-white py-2 px-4 rounded-lg w-full flex items-center justify-center'>
           Book now
-          <FaClipboardCheck className='ml-2' /> 
+          <FaPaperPlane className='ml-2' /> 
         </button>
       </div>
       </CardContent>
