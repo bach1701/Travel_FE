@@ -11,7 +11,7 @@ const PopularTour = () => {
     const baseURL = import.meta.env.VITE_API_URL;
 
     useEffect(() =>  {
-        const fetchTour = async() => {
+        const fetchPopularTour = async() => {
             try{
                 const response = await axios.get<TourResponse>(`${baseURL}/public/tours/search`);
                 const { tours, pagination } = response.data;
@@ -27,7 +27,7 @@ const PopularTour = () => {
             }
         };
 
-        fetchTour();
+        fetchPopularTour();
     }, []);
 
     return (

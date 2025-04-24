@@ -5,16 +5,23 @@ import { FaPlane } from 'react-icons/fa6';
 import { FaPaperPlane } from 'react-icons/fa';
 import { Card, CardContent } from './ui/CardItem';
 import { Badge } from './ui/BadgeItem';
+import { useNavigate } from 'react-router-dom';
 
 interface TourCardProps {
   tour: Tour;
 }
 
 const TourCardItem: React.FC<TourCardProps> = ({ tour }) => {
+
+  const navigate = useNavigate();
+  const handleClickBookNow = () => {
+    navigate(`/tour/detail-tour/${tour.tour_id}`);
+  };
+
   const coverImage = tour.images?.[0]?.image_url || '/placeholder.jpg';
 
   return (
-    <Card className='w-full cursor-pointer max-w-[350px] p-2 px-3 border-2 rounded-lg border-primary'>
+    <Card className='w-full max-w-[350px] p-2 px-3 border-2 rounded-lg border-primary'>
       <img 
       src={coverImage}
       alt={tour.title}
@@ -42,7 +49,7 @@ const TourCardItem: React.FC<TourCardProps> = ({ tour }) => {
         </div>
       <div className='border-t-2 border-gray-300 my-6'></div>
       <div className='flex justify-center mb-2'>
-        <button className='bg-orange-500 uppercase font-bold text-white py-2 px-4 rounded-lg w-full flex items-center justify-center'>
+        <button onClick={handleClickBookNow} className='bg-orange-500 uppercase font-bold text-white py-2 px-4 rounded-lg w-full flex items-center justify-center'>
           Book now
           <FaPaperPlane className='ml-2' /> 
         </button>

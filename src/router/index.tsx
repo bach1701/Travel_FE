@@ -5,6 +5,8 @@ import HomePage from '../page/HomePage';
 import PublicRoute from './PublicRoute';
 import MainLayout from '../layouts/mainLayout';
 import AboutPage from '../page/AboutPage';
+import TourPage from '@/page/TourPage';
+import DetailTour from '@/page/DetailTour';
 
 const AppRouter = () => {
     return (
@@ -33,10 +35,26 @@ const AppRouter = () => {
                     }
                 />
                 <Route 
+                    path='/tour' 
+                    element={
+                        <MainLayout>
+                            <TourPage />
+                        </MainLayout>
+                    }
+                />
+                <Route 
                     path='/about' 
                     element={
                         <MainLayout>
                             <AboutPage />
+                        </MainLayout>
+                    }
+                />
+                <Route 
+                    path="/tour/detail-tour/:id"
+                    element={
+                        <MainLayout>
+                            <DetailTour />
                         </MainLayout>
                     }
                 />

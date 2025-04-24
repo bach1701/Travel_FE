@@ -4,8 +4,11 @@ import banner1 from "../../assets/image/home/banner.jpeg";
 import banner2 from "../../assets/image/home/pq2.jpg";
 import banner3 from "../../assets/image/home/hcm.jpg";
 import styled from 'styled-components';
-
 import { FaMapMarkerAlt, FaCalendarAlt, FaSearch } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLocations } from '../../redux/locationSlice';
+import { RootState, AppDispatch } from '../../redux/store';
 
 const fadeImages = [
   {
@@ -47,6 +50,19 @@ const SearchButton = styled.button`
 `;
 
 const Slideshow = () => {
+
+  const [selectedDeparture, setSelectedDeparture] = useState('');
+  const [selectedDestination, setSelectedDestination] = useState('');
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { departureLocations, destinations,  } = useSelector(
+    (state: RootState) => state.location
+  );
+
+  useEffect(() => {
+    dispatch(fetchLocations());
+  }, [dispatch]);
+
   return (
     <div style={{ position: 'relative' }}>
       <div className="slide-container">
@@ -108,7 +124,7 @@ const Slideshow = () => {
         alignItems: 'center',
         border: '2px solid #FF6A00',
       }}>
-        <div style={{ flex: 1, position: 'relative' }}>
+        {/* <div style={{ flex: 1, position: 'relative' }}>
           <div style={{ position: 'relative' }}>
             <FaMapMarkerAlt style={{
               position: 'absolute',
@@ -129,6 +145,7 @@ const Slideshow = () => {
                 outline: 'none'
               }}
             />
+
           </div>
         </div>
 
@@ -154,7 +171,68 @@ const Slideshow = () => {
               }}
             />
           </div>
+        </div> */}
+
+        <div style={{ flex: 1, position: 'relative' }}>
+          <div style={{ position: 'relative' }}>
+            <FaMapMarkerAlt style={{
+              position: 'absolute',
+              left: '15px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              color: '#FF6A00'
+            }} />
+            <select
+              value={selectedDeparture}
+              onChange={(e) => setSelectedDeparture(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '14px 14px 14px 45px',
+                border: '1px solid #000',
+                borderRadius: '10px',
+                fontSize: '16px',
+                outline: 'none',
+                color: '#666'
+              }}
+            >
+              <option value="">Chọn điểm khởi hành</option>
+              {departureLocations.map((loc) => (
+                <option key={loc} value={loc}>{loc}</option>
+              ))}
+            </select>
+          </div>
         </div>
+
+        <div style={{ flex: 1, position: 'relative' }}>
+          <div style={{ position: 'relative' }}>
+            <FaMapMarkerAlt style={{
+              position: 'absolute',
+              left: '15px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              color: '#FF6A00'
+            }} />
+            <select
+              value={selectedDestination}
+              onChange={(e) => setSelectedDestination(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '14px 14px 14px 45px',
+                border: '1px solid #000',
+                borderRadius: '10px',
+                fontSize: '16px',
+                outline: 'none',
+                color: '#666'
+              }}
+            >
+              <option value="">Chọn điểm đến</option>
+              {destinations.map((dest) => (
+                <option key={dest} value={dest}>{dest}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
 
         <div style={{ flex: 1, position: 'relative' }}>
           <div style={{ position: 'relative' }}>

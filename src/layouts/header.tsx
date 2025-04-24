@@ -70,12 +70,12 @@ const Header: React.FC = () => {
                     Destination
                 </Link>
                 <Link
-                    to="/tours/popular"
+                    to="/tours"
                     className={`px-2 transition hover:text-primary ${
                         location.pathname === '/tours/popular' ? 'text-primary' : ''
                     }`}
                 >
-                    Popular Tour
+                    Tour
                 </Link>
                 <Link
                     to="/blog"

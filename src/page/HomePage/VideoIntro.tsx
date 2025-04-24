@@ -3,6 +3,7 @@ import bg from '../../assets/image/home/bg_video.png';
 import { FaPlay } from 'react-icons/fa';
 import Modal from 'react-modal';
 import '../../assets/scss/VideoIntro.css';
+import banner from '../../assets/image/search-tour/Frame 76.svg'
 
 const VideoIntro = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -72,6 +73,7 @@ const VideoIntro = () => {
                     allowFullScreen
                 ></iframe>
             </Modal>
+            <div className='mt-12 px-0' style={{ backgroundImage: `url(${banner})`, height: '386px'}}></div>
         </div>
     );
 };
