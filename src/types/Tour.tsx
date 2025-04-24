@@ -13,6 +13,17 @@ export interface TourItinerary {
     description: string;
 }
 
+export interface TourDeparture {
+    departure_id: number,
+    tour_id: number,
+    start_date: string,
+    price_adult: string,
+    price_child_120_140: string,
+    price_child_100_120: string,
+    availability: boolean,
+    description: string
+}
+
 export interface Tour {
     tour_id: number;
     seller_id: number;
@@ -26,4 +37,8 @@ export interface Tour {
     max_participants: number;
     availability: boolean;
     images: TourImage[];
+    next_departure_adult_price: string;
+    next_departure_id: number;
+    next_departure_date: string;
+    departures: TourDeparture[];
   }

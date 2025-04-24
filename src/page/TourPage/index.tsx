@@ -11,11 +11,10 @@ import { fetchLocations } from '../../redux/locationSlice';
 import { RootState, AppDispatch } from '../../redux/store';
 import { destinationRegionMap } from '@/utils/locationRegions';
 import { Pagination } from '@/types/Pagination';
+import { baseURL } from '@/config/api';
 
 
 const TourPage = () => {
-
-    const baseURL = import.meta.env.VITE_API_URL;
 
     const [region, setRegion] = useState<number | null>(null);
     const [departureDate, setDepartureDate] = useState('');
