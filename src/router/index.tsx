@@ -7,6 +7,7 @@ import MainLayout from '../layouts/mainLayout';
 import AboutPage from '../page/AboutPage';
 import TourPage from '@/page/TourPage';
 import DetailTour from '@/page/DetailTour';
+import CheckoutPage from '@/page/CheckoutPage';
 
 const AppRouter = () => {
     return (
@@ -55,6 +56,14 @@ const AppRouter = () => {
                     element={
                         <MainLayout>
                             <DetailTour />
+                        </MainLayout>
+                    }
+                />
+                <Route 
+                    path="/tour/detail-tour/:id/checkout"
+                    element={
+                        <MainLayout>
+                            <CheckoutPage />
                         </MainLayout>
                     }
                 />

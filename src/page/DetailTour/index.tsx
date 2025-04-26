@@ -1,10 +1,5 @@
 import banner from '../../assets/image/detail-tour/hue-4912504_1280 1.svg'
-import { FaCalendarAlt, FaClock, FaPlaneDeparture, FaInfoCircle, FaStar, FaRoute, FaMoneyBillWave, FaHeart, FaClipboardList, FaChevronUp, FaChevronDown } from 'react-icons/fa';
-import img1 from '../../assets/image/home/Cho-Hoi-An-2.jpg'
-import img2 from '../../assets/image/home/Hoi-An-5.jpg'
-import img3 from '../../assets/image/home/hcm.jpg'
-import img4 from '../../assets/image/home/pq.jpg'
-import img5 from '../../assets/image/home/pq2.jpg'
+import { FaCalendarAlt, FaClock, FaPlaneDeparture, FaInfoCircle, FaRoute, FaMoneyBillWave, FaHeart, FaClipboardList, FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
