@@ -125,7 +125,7 @@ const TourPage = () => {
                                 onChange={() => handleRegionChange(3)}
                             />
 
-                            <div className="border border-gray-300 pb-2" />
+                            <div className="border-b border-gray-300" />
 
                             <div className="">
                                 <label className='block text-sm font-medium mb-2' style={{ fontSize: '20px' }}>Điểm khởi hành</label>
