@@ -1,13 +1,18 @@
 import CustomRadioButton from "@/components/ui/CustomRadioButton";
+import { baseURL } from "@/config/api";
+import { Tour } from "@/types/Tour";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaPlus, FaMinus, FaArrowRight } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 
 const CheckoutPage = () => {
 
+    const { id } = useParams<{ id: string }>();
+
+    const [tour, setTour] = useState<Tour | null>(null);
     const [methodPay, setMethodPay] = useState<number | null>(null);
-
-    const [passengerInfos, setPassengerInfos] = useState<{ fullName: string; gender: string; birthday: string }[]>([]);
-
+    const [passengerInfos, setPassengerInfos] = useState<{ fullName: string; gender: string; birthday: string; type: string }[]>([]);
     const [passengers, setPassengers] = useState({
         adult: 0,
         baby: 0,
@@ -60,75 +65,29 @@ const CheckoutPage = () => {
             setMethodPay(newMethodPay);
         }
     };
-    
 
-    // const renderPassengerForms = () => {
-    //     const passengerTypes = [
-    //         { label: "Adult", key: "adult" },
-    //         { label: "Baby", key: "baby" },
-    //         { label: "Child (120cm-140cm)", key: "child_120_140" },
-    //         { label: "Child (100cm-120cm)", key: "child_100_120" },
-    //     ];
-    
-    //     return passengerTypes.flatMap(({ label, key }) =>
-    //         Array.from({ length: passengers[key as keyof typeof passengers] }, (_, index) => (
-    //             <div key={`${key}-${index}`} className="mb-4">
-    //                 <p className="text-[18px] font-semibold mb-3">{label} - {index + 1}</p>
-    //                 <div className="text-[16px] font-semibold bg-white p-4 border border-black rounded-lg flex flex-col md:flex-row gap-4">
-    //                     <div className="w-full md:w-[50%]">
-    //                         <p className="mb-2">Full Name<span className="text-primary font-normal"> *</span></p>
-    //                         <input
-    //                             className="font-normal border border-black rounded-md w-full h-[50px] px-3"
-    //                             type="text"
-    //                             placeholder="Type fullname"
-    //                         />
-    //                     </div>
-    //                     <div className="w-full md:w-[20%]">
-    //                         <p className="mb-2">Gender<span className="text-primary font-normal"> *</span></p>
-    //                         <select
-    //                             className="font-normal border border-black rounded-md w-full h-[50px] px-3"
-    //                         >
-    //                             <option>Male</option>
-    //                             <option>Female</option>
-    //                             <option>Other</option>
-    //                         </select>
-    //                     </div>
-    //                     <div className="w-full md:w-[30%]">
-    //                         <p className="mb-2">Birthday<span className="text-primary font-normal"> *</span></p>
-    //                         <input
-    //                             type="date"
-    //                             className="font-normal border border-black rounded-md w-full h-[50px] px-3"
-    //                         />
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         ))
-    //     );
-    // };
-    
+    const passengerTypes = [
+        { label: "Adult", key: "adult" },
+        { label: "Baby", key: "baby" },
+        { label: "Child (120cm-140cm)", key: "child_120_140" },
+        { label: "Child (100cm-120cm)", key: "child_100_120" },
+    ];
 
-    const renderPassengerForms = () => {
-        const passengerTypes = [
-            { label: "Adult", key: "adult" },
-            { label: "Baby", key: "baby" },
-            { label: "Child (120cm-140cm)", key: "child_120_140" },
-            { label: "Child (100cm-120cm)", key: "child_100_120" },
-        ];
-    
-        const totalCount = passengerTypes.reduce(
-            (sum, type) => sum + passengers[type.key as keyof typeof passengers],
-            0
-        );
-    
+    const renderPassengerForms = () => {  
+        
         useEffect(() => {
-            setPassengerInfos((prev) => {
-                const newArray = [...prev];
-                while (newArray.length < totalCount) {
-                    newArray.push({ fullName: "", gender: "", birthday: "" });
-                }
-                return newArray.slice(0, totalCount);
+            const newArray: { fullName: string; gender: string; birthday: string; type: string }[] = [];
+          
+            passengerTypes.forEach(({ key, label }) => {
+              const count = passengers[key as keyof typeof passengers];
+              for (let i = 0; i < count; i++) {
+                newArray.push({ fullName: "", gender: "", birthday: "", type: label });
+              }
             });
-        }, [passengers]);
+          
+            setPassengerInfos(newArray);
+          }, [passengers]);
+          
     
         let indexOffset = 0;
     
@@ -137,57 +96,57 @@ const CheckoutPage = () => {
             return Array.from({ length: count }, (_, index) => {
                 const globalIndex = index + indexOffset;
                 return (
-                    <div key={`${key}-${index}`} className="mb-4">
-                        <p className="text-[18px] font-semibold mb-3">
-                            {label} - {index + 1}
-                        </p>
-                        <div className="text-[16px] font-semibold bg-white p-4 border border-black rounded-lg flex flex-col md:flex-row gap-4">
-                            <div className="w-full md:w-[50%]">
-                                <p className="mb-2">Full Name<span className="text-primary font-normal"> *</span></p>
-                                <input
-                                    className="font-normal border border-black rounded-md w-full h-[50px] px-3"
-                                    type="text"
-                                    placeholder="Type fullname"
-                                    value={passengerInfos[globalIndex]?.fullName || ""}
-                                    onChange={(e) => {
-                                        const updated = [...passengerInfos];
-                                        updated[globalIndex].fullName = e.target.value;
-                                        setPassengerInfos(updated);
-                                    }}
-                                />
-                            </div>
-                            <div className="w-full md:w-[20%]">
-                                <p className="mb-2">Gender<span className="text-primary font-normal"> *</span></p>
-                                <select
-                                    className="font-normal border border-black rounded-md w-full h-[50px] px-3"
-                                    value={passengerInfos[globalIndex]?.gender || ""}
-                                    onChange={(e) => {
-                                        const updated = [...passengerInfos];
-                                        updated[globalIndex].gender = e.target.value;
-                                        setPassengerInfos(updated);
-                                    }}
-                                >
-                                    <option value="">Select</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            <div className="w-full md:w-[30%]">
-                                <p className="mb-2">Birthday<span className="text-primary font-normal"> *</span></p>
-                                <input
-                                    type="date"
-                                    className="font-normal border border-black rounded-md w-full h-[50px] px-3"
-                                    value={passengerInfos[globalIndex]?.birthday || ""}
-                                    onChange={(e) => {
-                                        const updated = [...passengerInfos];
-                                        updated[globalIndex].birthday = e.target.value;
-                                        setPassengerInfos(updated);
-                                    }}
-                                />
+                        <div key={`${key}-${index}`} className="mb-4">
+                            <p className="text-[18px] font-semibold mb-3">
+                                {label} - {index + 1}
+                            </p>
+                            <div className="text-[16px] font-semibold bg-white p-4 border border-black rounded-lg flex flex-col md:flex-row gap-4">
+                                <div className="w-full md:w-[50%]">
+                                    <p className="mb-2">Full Name<span className="text-primary font-normal"> *</span></p>
+                                    <input
+                                        className="font-normal border border-black rounded-md w-full h-[50px] px-3"
+                                        type="text"
+                                        placeholder="Type fullname"
+                                        value={passengerInfos[globalIndex]?.fullName || ""}
+                                        onChange={(e) => {
+                                            const updated = [...passengerInfos];
+                                            updated[globalIndex].fullName = e.target.value;
+                                            setPassengerInfos(updated);
+                                        }}
+                                    />
+                                </div>
+                                <div className="w-full md:w-[20%]">
+                                    <p className="mb-2">Gender<span className="text-primary font-normal"> *</span></p>
+                                    <select
+                                        className="font-normal border border-black rounded-md w-full h-[50px] px-3"
+                                        value={passengerInfos[globalIndex]?.gender || ""}
+                                        onChange={(e) => {
+                                            const updated = [...passengerInfos];
+                                            updated[globalIndex].gender = e.target.value;
+                                            setPassengerInfos(updated);
+                                        }}
+                                    >
+                                        <option value="">Select</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div className="w-full md:w-[30%]">
+                                    <p className="mb-2">Birthday<span className="text-primary font-normal"> *</span></p>
+                                    <input
+                                        type="date"
+                                        className="font-normal border border-black rounded-md w-full h-[50px] px-3"
+                                        value={passengerInfos[globalIndex]?.birthday || ""}
+                                        onChange={(e) => {
+                                            const updated = [...passengerInfos];
+                                            updated[globalIndex].birthday = e.target.value;
+                                            setPassengerInfos(updated);
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
                 );
             }).map((item, i) => {
                 if (i === count - 1) indexOffset += count;
@@ -196,10 +155,73 @@ const CheckoutPage = () => {
         });
     };
 
+    const calculateTotalPrice = (): number => {
+        if (!tour?.departures?.[0]) return 0; 
+        const departure = tour.departures[0];
+        return passengerTypes.reduce((total, type) => {
+            const count = passengers[type.key as keyof typeof passengers];
+    
+            let price = 0;
+            if (type.key === "adult") {
+                price = Number(departure.price_adult);
+            } else if (type.key === "child_120_140") {
+                price = Number(departure.price_child_120_140);
+            } else if (type.key === "child_100_120") {
+                price = Number(departure.price_child_100_120);
+            } else if (type.key === "baby") {
+                price = 0; 
+            }
+    
+            return total + count * price;
+        }, 0);
+    }; 
+
     const handleCheckout: () => void = () => {
         console.log(passengerInfos)
     }
-    
+
+    const formatDate = (dateStr: string): string => {
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return ""; 
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
+    const extractNights = (duration: string): number => {
+        const match = duration.match(/(\d+)\s*đêm/);
+        if (match) {
+          return parseInt(match[1], 10);
+        }
+        return 0;
+    };
+
+    const calculateEndDate = (startDateStr: string, nights: number): string => {
+    const startDate = new Date(startDateStr);
+    if (isNaN(startDate.getTime())) return ""; 
+    startDate.setDate(startDate.getDate() + nights);
+    return formatDate(startDate.toISOString().split('T')[0]);
+    };
+
+    const formatPrice = (price: number): string => {
+        const formattedPrice = price.toLocaleString('vi-VN');
+        return `${formattedPrice}`;
+    };
+
+    useEffect(()=>{
+        const fetchDetailTour = async() => {
+            try {
+                const response = await axios.get(`${baseURL}/public/tours/${id}`);
+                setTour(response.data);
+            }
+            catch (err) {
+                console.log(err);
+            }
+        };
+
+        fetchDetailTour();
+    }, [id])
 
     return (
         <div className="flex flex-col md:flex-row gap-8 px-24 mt-24">
@@ -338,11 +360,13 @@ const CheckoutPage = () => {
             <div className="w-full md:w-1/3 ml-4 md:ml-32 bg-white p-8 rounded-lg shadow-xl flex flex-col self-start">
 
                 <div>
-                    <p className="uppercase font-semibold text-[20px] mb-4">MIỀN TRUNG 4N3Đ | ĐÀ NẴNG – SƠN TRÀ – BÀ NÀ – PHỐ CỔ HỘI AN</p>
+                    <p className="uppercase font-semibold text-[20px] mb-4">{tour?.title}</p>
                     <div className="flex items-center">
-                        <p className="mr-2">27/04/2025</p>
+                        <p className="mr-2">{formatDate(tour?.departures?.[0]?.start_date ?? "")}</p>
                         <FaArrowRight />
-                        <p className="ml-2">30/04/2025</p>
+                        <p className="ml-2">
+                            {calculateEndDate(tour?.departures?.[0]?.start_date ?? "", extractNights(tour?.duration ?? ""))}
+                        </p>
                     </div>
                 </div>
 
@@ -350,14 +374,19 @@ const CheckoutPage = () => {
 
                 <div className="w-full space-y-2 text-[16px]">
                     {[
-                        { label: "Adult", key: "adult" },
-                        { label: "Child (120cm-140cm)", key: "child_120_140" },
-                        { label: "Child (100cm-120cm)", key: "child_100_120" },
-                        { label: "Baby", key: "baby" },
-                    ].map(({ label, key }) => (
+                        { label: "Adult", key: "adult", price: `${tour?.departures[0].price_adult}` },
+                        { label: "Child (120cm-140cm)", key: "child_120_140", price: `${tour?.departures[0].price_child_120_140}` },
+                        { label: "Child (100cm-120cm)", key: "child_100_120", price: `${tour?.departures[0].price_child_100_120}` },
+                        { label: "Baby", key: "baby", price: "0" },
+                    ].map(({ label, price, key }) => (
                         <div className="flex justify-between items-center" key={key}>
-                            <p className="text-sm">{label}</p>
-                            <span className="text-end font-semibold text-sm">{passengers[key as keyof typeof passengers]}  VNĐ </span>
+                        <p className="text-sm">{label}</p>
+                        <span className="text-end font-semibold text-sm">
+                            {passengers[key as keyof typeof passengers] === 0
+                            ? "0 VNĐ"
+                            : `${passengers[key as keyof typeof passengers]} x ${formatPrice(Number(price))} VNĐ`
+                            }
+                        </span>
                         </div>
                     ))}
                 </div>
@@ -398,8 +427,9 @@ const CheckoutPage = () => {
 
                 <div className="border my-5"></div>
 
-                <div className="text-primary font-bold">
+                <div className="text-primary font-bold flex justify-between text-center items-center">
                     <p>TOTAL:</p>
+                    <p style={{ fontSize: '32px' }}>{calculateTotalPrice().toLocaleString()} <span style={{ fontSize: '16px' }}> VNĐ</span></p>
                 </div>
 
                 <div className="border my-5"></div>

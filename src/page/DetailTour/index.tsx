@@ -1,6 +1,6 @@
 import banner from '../../assets/image/detail-tour/hue-4912504_1280 1.svg'
 import { FaCalendarAlt, FaClock, FaPlaneDeparture, FaInfoCircle, FaRoute, FaMoneyBillWave, FaHeart, FaClipboardList, FaChevronUp, FaChevronDown } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { baseURL } from '@/config/api';
@@ -14,12 +14,23 @@ const DetailTour = () => {
     const [image, setImage] = useState<TourImage []>([]);
     const [departures, setDepartures] = useState<TourDeparture []>([]);
     const [showPlans, setShowPlans] = useState<{ [key: number]: boolean }>({});
+    
+    const navigate = useNavigate();
 
     const togglePlan = (index: number) => {
         setShowPlans((prev) => ({
           ...prev,
           [index]: !prev[index],
         }));
+    };
+
+    const handleClickOrderNow: () => void = () => {
+        navigate(`${window.location.pathname}/checkout`);
+    };
+
+    const formatPrice = (price: number): string => {
+        const formattedPrice = price.toLocaleString('vi-VN');
+        return `${formattedPrice}`;
     };
 
     useEffect(() => {
@@ -62,10 +73,12 @@ const DetailTour = () => {
                         </div>
                 </div>
                 <div className='w-full md:w-1/4 items-center text-center pl-3'>
-                    <h1 className='text-primary font-bold mb-4'>
-                        {departures[0]?.price_adult} <span className='text-2xl font-bold'>VNĐ</span>
+                    <h1 className='text-primary font-bold mb-4' style={{ fontSize: '43px'}}>
+                        {formatPrice(Number(departures[0]?.price_adult))} 
+                        <span className='text-2xl font-bold'> VNĐ</span>
                     </h1>
                     <button
+                        onClick={handleClickOrderNow}
                         className='bg-primary text-white font-bold py-3 px-6 w-[85%] text-2xl hover:bg-orange-600 transition duration-300'
                     >
                         Đặt Ngay
@@ -157,7 +170,7 @@ const DetailTour = () => {
                             { label: 'Người lớn', price:  departures[0]?.price_adult },
                             { label: 'Trẻ em (120cm-140cm)', price:  departures[0]?.price_child_120_140 },
                             { label: 'Trẻ em (100cm-120cm)', price:  departures[0]?.price_child_100_120 },
-                            { label: 'Em bé', price: 'Free' },
+                            { label: 'Em bé', price: '0' },
                         ].map((item, index) => (
                             <div
                             key={index}
@@ -165,7 +178,7 @@ const DetailTour = () => {
                             >
                             <p className='whitespace-nowrap text-gray-800'  style={{ fontSize: '16px '}}>{item.label}</p>
                             <div className='flex-grow border-b-2 border-dotted border-black' />
-                            <p className='whitespace-nowrap text-gray-800'  style={{ fontSize: '16px '}}>{item.price}</p>
+                            <p className='whitespace-nowrap text-gray-800'  style={{ fontSize: '16px '}}>{item.price} VNĐ</p>
                             </div>
                         ))}
                     </div>
@@ -194,10 +207,12 @@ const DetailTour = () => {
                             <li className='pb-2'>Khởi hành: {departures[0]?.start_date}</li>
                             <li>Thời gian: {tour?.duration}</li>
                         </ul>
-                        <h2 className='text-center pb-8 font-semibold text-primary'>
-                            {departures[0]?.price_adult} <span className='text-[16px]'>VNĐ</span>
+                        <h2 className='text-center font-semibold text-primary'>
+                            {formatPrice(Number(departures[0]?.price_adult))}  
+                            <span className='text-[16px]'> VNĐ</span>
                         </h2>
-                        <button className='items-center bg-primary shadow-lg text-white w-full rounded-md p-4 text-2xl'>
+                        <div className="border border-primary mt-4 mb-8 w-[100%] items-center text-center justify-center"></div>
+                        <button onClick={handleClickOrderNow} className='uppercase font-semibold items-center bg-primary shadow-lg text-white w-full rounded-md p-4 text-2xl'>
                             Đặt ngay
                         </button>
                         </div>
