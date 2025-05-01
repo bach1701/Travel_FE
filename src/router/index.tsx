@@ -60,7 +60,7 @@ const AppRouter = () => {
                     }
                 />
                 <Route 
-                    path="/tour/detail-tour/:id/checkout"
+                    path="/tour/detail-tour/:id/departure/:id_depa/checkout"
                     element={
                         <MainLayout>
                             <CheckoutPage />

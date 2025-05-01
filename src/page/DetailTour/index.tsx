@@ -19,6 +19,8 @@ const DetailTour = () => {
     const [departures, setDepartures] = useState<TourDeparture []>([]);
     const [showPlans, setShowPlans] = useState<{ [key: number]: boolean }>({});
     const [listTours, setListTours] = useState<Tour[]>([]);
+    const [departuresChoose, setDeparturesChoose] = useState<TourDeparture | null>(null);
+
 
     const userReview = [
         {
@@ -106,12 +108,21 @@ const DetailTour = () => {
     };
 
     const handleClickOrderNow: () => void = () => {
-        navigate(`${window.location.pathname}/checkout`);
+        navigate(`${window.location.pathname}/departure/${departuresChoose?.departure_id}/checkout`);
     };
 
     const formatPrice = (price: number): string => {
         const formattedPrice = price.toLocaleString('vi-VN');
         return `${formattedPrice}`;
+    };
+
+    const formatDate = (dateStr: string): string => {
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return ""; 
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
     };
 
     useEffect(() => {
@@ -136,6 +147,10 @@ const DetailTour = () => {
         const shuffled = tours.sort(() => 0.5 - Math.random());
         return shuffled.slice(0, count);
     };
+
+    const handleChooseDeparture = (day: TourDeparture): void => {
+        setDeparturesChoose(day);
+    }
 
     useEffect(() => {
         const fetchTour = async() => {
@@ -191,7 +206,12 @@ const DetailTour = () => {
                             </div>
                             <div className='flex w-full md:w-9/10 text-center items-center gap-2 text-lg text-gray-800'>
                                 <FaCalendarAlt style={{ color: '#FF6A00' }} />
-                                <span>{departures[0]?.start_date}</span>
+                                {departures.slice(0, 3).map((day, key) => (
+                                    <button onClick={() => handleChooseDeparture(day)} key={key} className='rounded-md px-2 text-white bg-primary'>
+                                        {formatDate(day?.start_date)}
+                                    </button>
+                                ))}
+                                <button className='rounded-md px-2 text-white bg-primary w-[80px]'>...</button>
                             </div>
                         </div>
                         <div className='flex items-center gap-2 text-lg text-gray-800'>
@@ -413,22 +433,22 @@ const DetailTour = () => {
                 <div className='w-full md:w-1/4 space-y-4'>
                     <div className='flex flex-col gap-2 shadow-orange-300 bg-white p-8 text-left rounded-lg border border-primary'>
                         <div className='flex items-center gap-2'>
-                        <FaClipboardList style={{ color: '' }} className="text-xl" />
-                        <h4 className='font-semibold text-lg text-[18px]'>Basic information</h4>
+                            <FaClipboardList style={{ color: '' }} className="text-xl" />
+                            <h4 className='font-semibold text-lg text-[18px]'>Basic information</h4>
                         </div>
                         <div>
-                        <ul className='pb-8'>
-                            <li className='pb-2'>Depart: {departures[0]?.start_date}</li>
-                            <li>Duration: {tour?.duration}</li>
-                        </ul>
-                        <h2 className='text-center font-semibold text-primary'>
-                            {formatPrice(Number(departures[0]?.price_adult))}  
-                            <span className='text-[16px]'> VNĐ</span>
-                        </h2>
-                        <div className="border border-primary mt-4 mb-8 w-[100%] items-center text-center justify-center"></div>
-                        <button onClick={handleClickOrderNow} className='uppercase font-semibold items-center bg-primary shadow-lg text-white w-full rounded-md p-4 text-2xl'>
-                            Book Now
-                        </button>
+                            <ul className='pb-8'>
+                                <li className='pb-2'>Depart: {departuresChoose?.start_date}</li>
+                                <li>Duration: {tour?.duration}</li>
+                            </ul>
+                            <h2 className='text-center font-semibold text-primary'>
+                                {formatPrice(Number(departuresChoose?.price_adult))}  
+                                <span className='text-[16px]'> VNĐ</span>
+                            </h2>
+                            <div className="border border-primary mt-4 mb-8 w-[100%] items-center text-center justify-center"></div>
+                            <button onClick={handleClickOrderNow} className='uppercase font-semibold items-center bg-primary shadow-lg text-white w-full rounded-md p-4 text-2xl'>
+                                Book Now
+                            </button>
                         </div>
                     </div>
                 </div>

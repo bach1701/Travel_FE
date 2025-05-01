@@ -27,6 +27,8 @@ const TourPage = () => {
     const [selectedDestination, setSelectedDestination] = useState('');
     const [listTours, setListTours] = useState<Tour[]>([]);
     const [, setPagination] = useState<Pagination | null>(null);
+    const [noResult, setNoResult] = useState(false);
+
 
     const dispatch = useDispatch<AppDispatch>();
     const { departureLocations, destinations,  } = useSelector(
@@ -83,10 +85,16 @@ const TourPage = () => {
                 console.log('param -',params);
                 console.log('list tour -',listTours);
                 setPagination(pagination);
+                setNoResult(false);
             }
-            catch (err) {
-                console.error(err);
-            }
+            catch (err: any) {
+                if (axios.isAxiosError(err) && err.response?.data?.message === 'No tours found') {
+                    setListTours([]);
+                    setNoResult(true);
+                } else {
+                    console.error(err);
+                }
+            }            
         };
 
         fetchTour();
@@ -271,13 +279,17 @@ const TourPage = () => {
                 </div>
                 {/* List Tour */}
                 <div className='w-full md:w-3/4'>
-                    <div className='flex flex-wrap px-4 gap-6'>
-                        {listTours.map((tour) => (
-                            <div key={tour.tour_id} className='w-full sm:w-[calc(50%-16px)] lg:w-[calc(33.333%-16px)] xl:w-[330px]'>
-                                <TourCardItem tour={tour} />
-                            </div>
-                        ))}
-                    </div>
+                    {noResult ? (
+                        <h2 className='text-xl text-gray-600 px-4'>Không có kết quả tìm kiếm phù hợp.</h2>
+                    ) : (
+                        <div className='flex flex-wrap px-4 gap-6'>
+                            {listTours.map((tour) => (
+                                <div key={tour.tour_id} className='w-full sm:w-[calc(50%-16px)] lg:w-[calc(33.333%-16px)] xl:w-[330px]'>
+                                    <TourCardItem tour={tour} />
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

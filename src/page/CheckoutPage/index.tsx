@@ -6,12 +6,38 @@ import { useEffect, useState } from "react";
 import { FaPlus, FaMinus, FaArrowRight } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
+type BookingResponse = {
+    messsage: string,
+    booking: {
+        booking_id: number,
+        departure_id: number,
+        user_id: number,
+        num_adults: number,
+        num_children_120_140: number,
+        num_children_100_120: number,
+        total_price: string,
+        booking_status: string,
+        special_requests: string,
+        booking_date: string,
+        tour_title: string,
+        departure_date: string,
+        departure_location: string
+        };
+};
+
+type PaymentResponse = {
+    message: string;
+    paymentUrl: string;
+    checkout_id: number;
+    transaction_id: string;
+};
+
 const CheckoutPage = () => {
 
-    const { id } = useParams<{ id: string }>();
+    const { id, id_depa } = useParams<{ id: string; id_depa: string }>();
 
     const [tour, setTour] = useState<Tour | null>(null);
-    const [methodPay, setMethodPay] = useState<number | null>(null);
+    const [methodPay, setMethodPay] = useState<number | null>(1);
     const [passengerInfos, setPassengerInfos] = useState<{ fullName: string; gender: string; birthday: string; type: string }[]>([]);
     const [passengers, setPassengers] = useState({
         adult: 0,
@@ -205,9 +231,61 @@ const CheckoutPage = () => {
         return `${formattedPrice}`;
     };
 
-    const handleCheckout: () => void = () => {
-        
-    }
+    const handleCheckout = async (): Promise<void> => {
+        if(!tour) return;
+        try {
+            const token = localStorage.getItem('AccessToken');
+            if(!token) {
+                alert("Vui lòng đăng nhập để tiếp tục.");
+                return;
+            }
+
+            const headers = {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              };
+
+            const bookingData = {
+                departure_id: id_depa, 
+                num_adults: passengers.adult,
+                num_children_120_140: passengers.child_120_140,
+                num_children_100_120: passengers.child_100_120,
+                special_requests: orderNote.filter(note => note.value).map(note => note.vn).join(', '),
+            };
+
+            const bookingRes = await axios.post<BookingResponse>(`${baseURL}/user/bookings`, bookingData, { headers });
+
+            const bookingID = bookingRes.data.booking.booking_id;
+            let methodPayment = '';
+
+            if (methodPay === 3) {
+                methodPayment = 'direct_to_seller';
+            }   
+            if (methodPay === 1) {
+                methodPayment = 'stripe';
+            } 
+            if (methodPay === 2) {
+                methodPayment = 'vnpay';
+            } 
+            
+            console.log('payment - ', methodPayment);
+
+            const paymentRes = await axios.post<PaymentResponse>(`${baseURL}/user/payments`, 
+                {
+                    booking_id: bookingID,
+                    payment_method: methodPayment
+                },
+                { headers }
+            );
+
+            const paymentURL = paymentRes.data.paymentUrl;
+            if(paymentURL) window.location.href = paymentURL;
+            else alert('Không nhận được đường dẫn thanh toán.');
+
+        }catch (error) {
+            console.log (error);
+        }
+    };
 
     useEffect(()=>{
         const fetchDetailTour = async() => {
@@ -398,19 +476,19 @@ const CheckoutPage = () => {
                 <div className="border my-5"></div>
                 <div className="space-y-4">
                     <CustomRadioButton
-                        label="Tiền mặt"
+                        label="Stripe"
                         value={1}
                         checked={methodPay === 1}
                         onChange={() => handleMethodPayChange(1)}
                     />
                     <CustomRadioButton
-                        label="Stripe"
+                        label="VNPAY"
                         value={2}
                         checked={methodPay === 2}
                         onChange={() => handleMethodPayChange(2)}
                     />
                     <CustomRadioButton
-                        label="VnPay"
+                        label="Tiền mặt"
                         value={3}
                         checked={methodPay === 3}
                         onChange={() => handleMethodPayChange(3)}
