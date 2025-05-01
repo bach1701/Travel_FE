@@ -176,10 +176,6 @@ const CheckoutPage = () => {
         }, 0);
     }; 
 
-    const handleCheckout: () => void = () => {
-        console.log(passengerInfos)
-    }
-
     const formatDate = (dateStr: string): string => {
         const date = new Date(dateStr);
         if (isNaN(date.getTime())) return ""; 
@@ -208,6 +204,10 @@ const CheckoutPage = () => {
         const formattedPrice = price.toLocaleString('vi-VN');
         return `${formattedPrice}`;
     };
+
+    const handleCheckout: () => void = () => {
+        
+    }
 
     useEffect(()=>{
         const fetchDetailTour = async() => {
@@ -311,9 +311,7 @@ const CheckoutPage = () => {
                     <div>
                         {renderPassengerForms()}
                     </div>
-
                 </div>
-
                 <div className="mt-16">
                     <h4 className="text-lg font-semibold mb-3" style={{ fontSize: '24px'}}>Order Note</h4>
                     <p className="mb-3 text-[16px]">If you have any notes, please tell us!</p>
@@ -344,7 +342,6 @@ const CheckoutPage = () => {
                         </div>
                     </div>
                 </div>
-
                 <div className="mt-8 text-[16px] bg-white border text-center border-black p-4 rounded-lg mb-8">
                     <p>By clicking the "AGREE" button below, the Customer agrees that these Terms and Conditions will apply. Please read the Terms and Conditions carefully before choosing to use the services of B&P Tours.</p>
                     <div className="flex justify-center">
@@ -356,9 +353,7 @@ const CheckoutPage = () => {
                     </div>
                 </div>
             </div>
-
-            <div className="w-full md:w-1/3 ml-4 md:ml-32 bg-white p-8 rounded-lg shadow-xl flex flex-col self-start">
-
+            <div className="w-full md:w-1/3 ml-4 md:ml-32 bg-white p-8 border border-primary rounded-lg shadow-xl flex flex-col self-start">
                 <div>
                     <p className="uppercase font-semibold text-[20px] mb-4">{tour?.title}</p>
                     <div className="flex items-center">
@@ -392,7 +387,6 @@ const CheckoutPage = () => {
                 </div>
 
                 <div className="border my-5"></div>
-
                 <div className="w-full flex">
                     <input
                         className="w-3/4 border border-primary uppercase p-2"
@@ -401,9 +395,7 @@ const CheckoutPage = () => {
                     />
                     <button className="w-1/4 uppercase font-semibold bg-primary text-white p-2">Apply</button>
                 </div>
-
                 <div className="border my-5"></div>
-
                 <div className="space-y-4">
                     <CustomRadioButton
                         label="Tiền mặt"
@@ -424,21 +416,16 @@ const CheckoutPage = () => {
                         onChange={() => handleMethodPayChange(3)}
                     />
                 </div>
-
                 <div className="border my-5"></div>
-
                 <div className="text-primary font-bold flex justify-between text-center items-center">
                     <p>TOTAL:</p>
                     <p style={{ fontSize: '32px' }}>{calculateTotalPrice().toLocaleString()} <span style={{ fontSize: '16px' }}> VNĐ</span></p>
                 </div>
-
                 <div className="border my-5"></div>
-
                 <div>
                     <button onClick={handleCheckout} className="uppercase p-4 text-white bg-primary font-bold rounded-lg w-full text-[22px]">Checkout</button>
                 </div>
             </div>
-
         </div>
     );
 };
