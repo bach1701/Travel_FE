@@ -5,6 +5,9 @@ import { resolve } from 'path';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    port: 3000, // 🔥 Đổi sang cổng bạn muốn
+  },
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'), 

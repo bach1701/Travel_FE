@@ -41,4 +41,5 @@ export interface Tour {
     next_departure_id: number;
     next_departure_date: string;
     departures: TourDeparture[];
+    price_adult: string;
   }

@@ -12,19 +12,27 @@ import { RootState, AppDispatch } from '../../redux/store';
 import { destinationRegionMap } from '@/utils/locationRegions';
 import { Pagination } from '@/types/Pagination';
 import { baseURL } from '@/config/api';
+import { useSearchParams } from 'react-router-dom';
 
 
 const TourPage = () => {
 
-    const [region, setRegion] = useState<number | null>(null);
-    const [departureDate, setDepartureDate] = useState('');
+    const [searchParams] = useSearchParams();
+
+    // const searchParamsDeparture = searchParams.get('departure');
+    const searchParamsDestination = searchParams.get('destination');
+    const searchParamsDate = searchParams.get('date');
+    const searchParamsDuration = searchParams.get('duration');
+
+    const [region, setRegion] = useState<number | null>(0);
+    const [departureDate, setDepartureDate] = useState<string>(searchParamsDate || '');
     const [showDurationOptions, setShowDurationOptions] = useState(false);
-    const [duration, setDuration] = useState('');
+    const [duration, setDuration] = useState(searchParamsDuration);
     const [showPeopleOptions, setShowPeopleOptions] = useState(false);
     const [people, setPeople] = useState('');
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000000]);
     const [selectedDeparture, setSelectedDeparture] = useState('');
-    const [selectedDestination, setSelectedDestination] = useState('');
+    const [selectedDestination, setSelectedDestination] = useState<string>(searchParamsDestination || '');
     const [listTours, setListTours] = useState<Tour[]>([]);
     const [, setPagination] = useState<Pagination | null>(null);
     const [noResult, setNoResult] = useState(false);
@@ -72,6 +80,10 @@ const TourPage = () => {
     
                 if (duration) {
                     params.duration_range = duration;
+                }
+
+                if (departureDate) {
+                    params.departure_date = departureDate;
                 }
 
                 if(people !== '') {

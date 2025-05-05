@@ -1,10 +1,11 @@
 import CustomRadioButton from "@/components/ui/CustomRadioButton";
 import { baseURL } from "@/config/api";
-import { Tour } from "@/types/Tour";
+import { Tour, TourDeparture } from "@/types/Tour";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaPlus, FaMinus, FaArrowRight } from "react-icons/fa";
 import { useParams } from "react-router-dom";
+import term from '../../assets/term/dieu_khoan_chung.pdf'
 
 type BookingResponse = {
     messsage: string,
@@ -39,6 +40,8 @@ const CheckoutPage = () => {
     const [tour, setTour] = useState<Tour | null>(null);
     const [methodPay, setMethodPay] = useState<number | null>(1);
     const [passengerInfos, setPassengerInfos] = useState<{ fullName: string; gender: string; birthday: string; type: string }[]>([]);
+    const [departure, setDeparture] = useState<TourDeparture | null> (null);
+    const [isAgreeTerm, setIsAgreeTerm] = useState(false);
     const [passengers, setPassengers] = useState({
         adult: 0,
         baby: 0,
@@ -220,10 +223,10 @@ const CheckoutPage = () => {
     };
 
     const calculateEndDate = (startDateStr: string, nights: number): string => {
-    const startDate = new Date(startDateStr);
-    if (isNaN(startDate.getTime())) return ""; 
-    startDate.setDate(startDate.getDate() + nights);
-    return formatDate(startDate.toISOString().split('T')[0]);
+        const startDate = new Date(startDateStr);
+        if (isNaN(startDate.getTime())) return ""; 
+        startDate.setDate(startDate.getDate() + nights);
+        return formatDate(startDate.toISOString().split('T')[0]);
     };
 
     const formatPrice = (price: number): string => {
@@ -231,8 +234,16 @@ const CheckoutPage = () => {
         return `${formattedPrice}`;
     };
 
+    // const handleCofirmCheckout = (): void => {
+
+    // }
+
     const handleCheckout = async (): Promise<void> => {
         if(!tour) return;
+        if(isAgreeTerm === false) {
+            alert('Vui lòng đọc Điều khoản chung!');
+            return;
+        }
         try {
             const token = localStorage.getItem('AccessToken');
             if(!token) {
@@ -243,7 +254,7 @@ const CheckoutPage = () => {
             const headers = {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
-              };
+            };
 
             const bookingData = {
                 departure_id: id_depa, 
@@ -298,8 +309,18 @@ const CheckoutPage = () => {
             }
         };
 
+        const fetchDeparture = async() => {
+            try {
+                const response = await axios.get(`${baseURL}/public/departures/${id_depa}`);
+                setDeparture(response.data);
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+        fetchDeparture();
         fetchDetailTour();
-    }, [id])
+    }, [id, id_depa])
 
     return (
         <div className="flex flex-col md:flex-row gap-8 px-24 mt-24">
@@ -424,9 +445,11 @@ const CheckoutPage = () => {
                     <p>By clicking the "AGREE" button below, the Customer agrees that these Terms and Conditions will apply. Please read the Terms and Conditions carefully before choosing to use the services of B&P Tours.</p>
                     <div className="flex justify-center">
                         <label className="flex items-center gap-1">
-                            <input type="checkbox" style={{ fontSize: '16px', width: '16px', height: '16px' }} />
+                            <input type="checkbox" onClick={() => setIsAgreeTerm(!isAgreeTerm)} style={{ fontSize: '16px', width: '16px', height: '16px' }} />
                             <span> I have read and agree to the</span>
-                            <a className="text-primary" href="">Payment terms</a>
+                            <a className="text-primary" href={term} target="_blank" rel="noopener noreferrer">
+                                Payment terms
+                            </a>
                         </label>
                     </div>
                 </div>
@@ -435,10 +458,10 @@ const CheckoutPage = () => {
                 <div>
                     <p className="uppercase font-semibold text-[20px] mb-4">{tour?.title}</p>
                     <div className="flex items-center">
-                        <p className="mr-2">{formatDate(tour?.departures?.[0]?.start_date ?? "")}</p>
+                        <p className="mr-2">{formatDate(departure?.start_date ?? "")}</p>
                         <FaArrowRight />
                         <p className="ml-2">
-                            {calculateEndDate(tour?.departures?.[0]?.start_date ?? "", extractNights(tour?.duration ?? ""))}
+                            {calculateEndDate(departure?.start_date ?? "", extractNights(tour?.duration ?? ""))}
                         </p>
                     </div>
                 </div>
@@ -447,9 +470,9 @@ const CheckoutPage = () => {
 
                 <div className="w-full space-y-2 text-[16px]">
                     {[
-                        { label: "Adult", key: "adult", price: `${tour?.departures[0].price_adult}` },
-                        { label: "Child (120cm-140cm)", key: "child_120_140", price: `${tour?.departures[0].price_child_120_140}` },
-                        { label: "Child (100cm-120cm)", key: "child_100_120", price: `${tour?.departures[0].price_child_100_120}` },
+                        { label: "Adult", key: "adult", price: `${departure?.price_adult}` },
+                        { label: "Child (120cm-140cm)", key: "child_120_140", price: `${departure?.price_child_120_140}` },
+                        { label: "Child (100cm-120cm)", key: "child_100_120", price: `${departure?.price_child_100_120}` },
                         { label: "Baby", key: "baby", price: "0" },
                     ].map(({ label, price, key }) => (
                         <div className="flex justify-between items-center" key={key}>

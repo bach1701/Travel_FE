@@ -7,7 +7,8 @@ import { baseURL } from '@/config/api';
 import { Tour, TourDeparture, TourImage, TourItinerary } from '@/types/Tour';
 import TourCardItem from '@/components/TourCardItem';
 import StarRatings from 'react-star-ratings';
-import ava from '../../assets/image/home/ava-default.svg';
+import { ReviewResponse } from '../TourPage/ReviewType';
+
 
 
 const DetailTour = () => {
@@ -20,50 +21,8 @@ const DetailTour = () => {
     const [showPlans, setShowPlans] = useState<{ [key: number]: boolean }>({});
     const [listTours, setListTours] = useState<Tour[]>([]);
     const [departuresChoose, setDeparturesChoose] = useState<TourDeparture | null>(null);
-
-
-    const userReview = [
-        {
-            ava: ava,
-            name: 'Phạm Duy Lết',
-            rule: 'Web Developer',
-            rating: 5,
-            review: 'Lorem ipsum dolor sit amet consectetur. Porta ullamcorper vitae sem nec sem feugiat volutpat. Lorem ipsum dolor sit amet consectetur. Porta ullamcorper vitae sem nec sem feugiat volutpat.'
-        }
-    ];
-
-    const rating = [
-        {
-            label: 'Service',
-            rating: 5,
-
-        },
-        {
-            label: 'Guides',
-            rating: 4,
-
-        },
-        {
-            label: 'Quality',
-            rating: 5,
-
-        },
-        {
-            label: 'Safety',
-            rating: 4,
-
-        },
-        {
-            label: 'Food',
-            rating: 5,
-
-        },
-        {
-            label: 'Hotel',
-            rating: 5,
-
-        },
-    ];
+    const [reviewTour, setReviewTour] = useState<ReviewResponse | null>(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     const dataReview = {
         rating : [
@@ -111,6 +70,10 @@ const DetailTour = () => {
         navigate(`${window.location.pathname}/departure/${departuresChoose?.departure_id}/checkout`);
     };
 
+    const handleClickBookNow = (day: TourDeparture): void => {
+        navigate(`${window.location.pathname}/departure/${day.departure_id}/checkout`);
+    }
+
     const formatPrice = (price: number): string => {
         const formattedPrice = price.toLocaleString('vi-VN');
         return `${formattedPrice}`;
@@ -125,15 +88,33 @@ const DetailTour = () => {
         return `${day}/${month}/${year}`;
     };
 
+    const extractNights = (duration: string): number => {
+        const match = duration.match(/(\d+)\s*đêm/);
+        if (match) {
+          return parseInt(match[1], 10);
+        }
+        return 0;
+    };
+
+    const calculateEndDate = (startDateStr: string, nights: number): string => {
+        const startDate = new Date(startDateStr);
+        if (isNaN(startDate.getTime())) return ""; 
+        startDate.setDate(startDate.getDate() + nights);
+        return formatDate(startDate.toISOString().split('T')[0]);
+    };
+
     useEffect(() => {
         const fetchDetailTour = async() => {
             try {
-                const response = await axios.get(`${baseURL}/public/tours/${id}`);
-                setTour(response.data);
-                setItinerary(response.data.itinerary);
-                setImage(response.data.images);
-                setDepartures(response.data.departures);
-                console.log(tour, itinerary);
+                const resDetailTour = await axios.get(`${baseURL}/public/tours/${id}`);
+                const resReviewTour = await axios.get(`${baseURL}/public/reviews/tours/${id}`);
+                setReviewTour(resReviewTour.data); 
+                setTour(resDetailTour.data);
+                setItinerary(resDetailTour.data.itinerary);
+                setImage(resDetailTour.data.images);
+                setDepartures(resDetailTour.data.departures);
+                setDeparturesChoose(resDetailTour.data.departures[0]);
+                console.log(resDetailTour.data.departures);
             }
             catch (err) {
                 console.log(err)
@@ -168,6 +149,34 @@ const DetailTour = () => {
 
         fetchTour();
     },[]);
+    
+    const convertToIntegerAndRound = (str: string | undefined) => {
+        if (str === undefined) {
+            throw new Error('Invalid input: input is undefined');
+        }
+    
+        const number = parseFloat(str);
+        if (isNaN(number)) {
+            throw new Error('Invalid input: not a number');
+        }
+    
+        return Math.round(number * 100) / 100;
+    };
+
+    const handlePrev = () => {
+        setCurrentIndex(prev => {
+            const total = reviewTour?.reviews?.length || 0;
+            return prev > 0 ? prev - 1 : total - 1;
+          });
+      };
+      
+    const handleNext = () => {
+        setCurrentIndex(prev => {
+            const total = reviewTour?.reviews?.length || 0;
+            return prev < total -1 ? prev + 1 : 0;
+        });
+    };
+      
 
     return (
         <div >
@@ -281,9 +290,9 @@ const DetailTour = () => {
                                     <div className='border border-black my-1 mb-4' />
 
                                     {[
-                                        { label: 'Người lớn', price:  departures[0]?.price_adult },
-                                        { label: 'Trẻ em (120cm-140cm)', price:  departures[0]?.price_child_120_140 },
-                                        { label: 'Trẻ em (100cm-120cm)', price:  departures[0]?.price_child_100_120 },
+                                        { label: 'Người lớn', price:  departuresChoose?.price_adult },
+                                        { label: 'Trẻ em (120cm-140cm)', price:  departuresChoose?.price_child_120_140 },
+                                        { label: 'Trẻ em (100cm-120cm)', price:  departuresChoose?.price_child_100_120 },
                                         { label: 'Em bé', price: '0' },
                                     ].map((item, index) => (
                                         <div
@@ -292,7 +301,7 @@ const DetailTour = () => {
                                         >
                                         <p className='whitespace-nowrap text-gray-800'  style={{ fontSize: '16px '}}>{item.label}</p>
                                         <div className='flex-grow border-b-2 border-dotted border-black' />
-                                        <p className='whitespace-nowrap text-gray-800'  style={{ fontSize: '16px '}}>{item.price} VNĐ</p>
+                                        <p className='whitespace-nowrap text-gray-800'  style={{ fontSize: '16px '}}>{formatPrice(Number(item.price))} VNĐ</p>
                                         </div>
                                     ))}
                                 </div>
@@ -301,6 +310,28 @@ const DetailTour = () => {
                                     <div className='flex items-center gap-2 text-lg font-semibold text-primary'>
                                         <FaCalendarAlt style={{ color: '#FF6A00' }} />
                                         <h3 style={{ fontSize: '24px' }}>Departure Date List</h3>
+                                    </div>
+                                    <div className="flex flex-col text-black mt-12">
+                                        {departures.map((dep, index) => (
+                                            <div
+                                            key={index}
+                                            className="flex flex-row border rounded overflow-hidden mb-4 border-black"
+                                            >
+                                            <div className="flex items-center text-center justify-between gap-2 flex-[2] p-3 border-r border-black">
+                                                <h5>{formatDate(dep.start_date)}</h5>
+                                                <FaArrowRight />
+                                                <h5>{calculateEndDate(dep.start_date, extractNights(tour?.duration ?? ""))}</h5>
+                                            </div>
+                                            <div className="flex items-center justify-center flex-1 p-3 border-r border-black">
+                                                <h5>{formatPrice(Number(dep.price_adult))} <span className='text-[18px]'>VNĐ</span></h5>
+                                            </div>
+                                            <div className="flex items-center justify-center flex-1 p-3">
+                                                <button onClick={() => handleClickBookNow(dep)} className="text-[20px] text-white px-4 py-1 font-semibold bg-primary uppercase rounded">
+                                                Book Now
+                                                </button>
+                                            </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                                 <div className='border border-primary mx-6 mt-12 mb-12'></div>
@@ -313,65 +344,146 @@ const DetailTour = () => {
                                         <div className="w-full ">
                                             <div className="flex flex-row flex-wrap px-4 gap-6 bg-white border border-primary py-6 rounded-lg p-4">
                                                 <div className="flex flex-col justify-center items-center px-4">
-                                                    <h2 className="text-2xl font-semibold">4,8/5</h2>
+                                                    <h2 className="text-2xl font-semibold">
+                                                    {reviewTour?.averageRating?.overall_rating
+                                                        ? `${convertToIntegerAndRound(reviewTour.averageRating.overall_rating)} / 5`
+                                                        : 'Chưa có đánh giá'}
+                                                    </h2>
                                                     <StarRatings
-                                                        rating={userReview[0].rating}
+                                                        rating={reviewTour?.averageRating?.overall_rating ?
+                                                            convertToIntegerAndRound(reviewTour?.averageRating.overall_rating) : 0}
                                                         starRatedColor="#FF6A00"
                                                         numberOfStars={5}
                                                         name="rating"
                                                         starDimension="30px"
                                                         starSpacing="5px"
                                                     />
-                                                <h5 className="text-sm text-gray-500 mt-2">299+ Reviews</h5>
+                                                    <h5 className="text-sm text-gray-500 mt-2">{reviewTour?.averageRating.review_count} Reviews</h5>
                                                 </div>
                                                 <div className="flex flex-col justify-center gap-4 flex-1">
-                                                    {rating.map((rate, index) => (
-                                                        <div key={index} className="flex items-center gap-4">
-                                                            <StarRatings
-                                                                rating={rate.rating}
-                                                                starRatedColor="#FF6A00"
-                                                                numberOfStars={5}
-                                                                name="rating"
-                                                                starDimension="24px"
-                                                                starSpacing="4px"
-                                                            />
-                                                            <p className="text-base">{rate.label}</p>
-                                                        </div>
-                                                    ))}
+                                                    <div className="flex items-center gap-4">
+                                                        <StarRatings
+                                                            rating={reviewTour?.averageRating?.foods_rating ?
+                                                                convertToIntegerAndRound(reviewTour?.averageRating.foods_rating) : 0}
+                                                            starRatedColor="#FF6A00"
+                                                            numberOfStars={5}
+                                                            name="rating"
+                                                            starDimension="24px"
+                                                            starSpacing="4px"
+                                                        />
+                                                        <p className="text-base">Food</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-4">
+                                                        <StarRatings
+                                                            rating={reviewTour?.averageRating?.guides_rating ?
+                                                                convertToIntegerAndRound(reviewTour?.averageRating.guides_rating) : 0}
+                                                            starRatedColor="#FF6A00"
+                                                            numberOfStars={5}
+                                                            name="rating"
+                                                            starDimension="24px"
+                                                            starSpacing="4px"
+                                                        />
+                                                        <p className="text-base">Guide</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-4">
+                                                        <StarRatings
+                                                            rating={reviewTour?.averageRating?.hotels_rating ?
+                                                                convertToIntegerAndRound(reviewTour?.averageRating.hotels_rating) : 0}
+                                                            starRatedColor="#FF6A00"
+                                                            numberOfStars={5}
+                                                            name="rating"
+                                                            starDimension="24px"
+                                                            starSpacing="4px"
+                                                        />
+                                                        <p className="text-base">Hotel</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-4">
+                                                        <StarRatings
+                                                            rating={reviewTour?.averageRating?.quality_rating ?
+                                                                convertToIntegerAndRound(reviewTour?.averageRating.quality_rating) : 0}
+                                                            starRatedColor="#FF6A00"
+                                                            numberOfStars={5}
+                                                            name="rating"
+                                                            starDimension="24px"
+                                                            starSpacing="4px"
+                                                        />
+                                                        <p className="text-base">Quality</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-4">
+                                                        <StarRatings
+                                                            rating={reviewTour?.averageRating?.safety_rating ?
+                                                                convertToIntegerAndRound(reviewTour?.averageRating.safety_rating) : 0}
+                                                            starRatedColor="#FF6A00"
+                                                            numberOfStars={5}
+                                                            name="rating"
+                                                            starDimension="24px"
+                                                            starSpacing="4px"
+                                                        />
+                                                        <p className="text-base">Safety</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-4">
+                                                        <StarRatings
+                                                            rating={reviewTour?.averageRating?.services_rating ?
+                                                                convertToIntegerAndRound(reviewTour?.averageRating.services_rating) : 0}
+                                                            starRatedColor="#FF6A00"
+                                                            numberOfStars={5}
+                                                            name="rating"
+                                                            starDimension="24px"
+                                                            starSpacing="4px"
+                                                        />
+                                                        <p className="text-base">Service</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className='mt-12 flex-1 text-center bg-white border border-primary rounded-2xl px-24 py-16 shadow-lg relative'>
-                                            <h3 className='font-bold pb-4' style={{ fontSize: '30px'}}>Customer review</h3>
-                                            <div className='pb-4'>
-                                                <StarRatings
-                                                    rating={userReview[0].rating}
-                                                    starRatedColor="#FF6A00"
-                                                    numberOfStars= {5}
-                                                    name='rating'
-                                                    starDimension="30px"
-                                                    starSpacing="5px"
-                                                />
-                                            </div>
-                                            <p className='pb-4 text-left' style={{ fontSize: '20px'}}>{userReview[0].review}</p>
-                                            <div className='flex items-center justify-center mt-4'>
-                                                <img src={userReview[0].ava} alt="userReview Avatar" className='w-12 h-12 rounded-full' />
-                                                <div className='w-4' /> 
-                                                <div className='mr-4 text-left'>
-                                                    <h5>{userReview[0].name}</h5>
-                                                    <p>{userReview[0].rule}</p>
+                                        {Array.isArray(reviewTour?.reviews) && reviewTour.reviews.length > 0 && (
+                                            <div className='mt-12 flex-1 text-center bg-white border border-primary rounded-2xl px-24 py-16 shadow-lg relative'>
+                                                <h3 className='font-bold pb-4' style={{ fontSize: '30px'}}>Customer review</h3>
+                                                <div className='pb-4'>
+                                                    <StarRatings
+                                                        rating={convertToIntegerAndRound(reviewTour?.reviews[currentIndex].average_rating)}
+                                                        starRatedColor="#FF6A00"
+                                                        numberOfStars={5}
+                                                        name='rating'
+                                                        starDimension="30px"
+                                                        starSpacing="5px"
+                                                    />
                                                 </div>
-                                            </div>
-                                            <div className='absolute bottom-4 right-4 flex space-x-2'>
-                                                <button className='p-2 border border-gray-400 bg-white rounded-full hover:bg-primary flex items-center justify-center'>
+                                                <p className='pb-4 text-left' style={{ fontSize: '20px' }}>
+                                                {reviewTour?.reviews[currentIndex].comment}
+                                                </p>
+
+                                                <div className='flex items-center justify-center mt-4'>
+                                                <img
+                                                    src={reviewTour?.reviews[currentIndex].user_avatar || '/default-avatar.png'}
+                                                    alt="userReview Avatar"
+                                                    className='w-12 h-12 rounded-full border border-gray-300 p-1'
+                                                />
+                                                <div className='w-4' />
+                                                <div className='mr-4 text-left'>
+                                                    <h5>{reviewTour?.reviews[currentIndex].user_name}</h5>
+                                                    <p>Traveler</p>
+                                                </div>
+                                                </div>
+
+                                                <div className='absolute bottom-4 right-4 flex space-x-2'>
+                                                <button
+                                                    onClick={handlePrev}
+                                                    className='p-2 border border-gray-400 bg-white rounded-full hover:bg-primary flex items-center justify-center'
+                                                >
                                                     <FaArrowLeft className='text-gray-400 hover:text-white' style={{ fontSize: '25px' }} />
                                                 </button>
-                                                <button className='p-2 border border-gray-400 bg-white rounded-full hover:bg-primary flex items-center justify-center'>
+                                                <button
+                                                    onClick={handleNext}
+                                                    className='p-2 border border-gray-400 bg-white rounded-full hover:bg-primary flex items-center justify-center'
+                                                >
                                                     <FaArrowRight className='text-gray-400 hover:text-white' style={{ fontSize: '25px' }} />
                                                 </button>
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
+
 
                                         <div className='p-8 mt-12 rounded-lg border  border-primary bg-white'>
                                             <h3 className='font-semibold'>Write a review</h3>

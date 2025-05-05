@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Tour } from '@/types/Tour';
-import { FaClock } from 'react-icons/fa';
-import { FaPlane } from 'react-icons/fa6';
-import { FaPaperPlane } from 'react-icons/fa';
+import { FaClock, FaPlaneDeparture, FaPaperPlane } from 'react-icons/fa';
 import { Card, CardContent } from './ui/CardItem';
 import { Badge } from './ui/BadgeItem';
 import { useNavigate } from 'react-router-dom';
@@ -11,12 +9,21 @@ interface TourCardProps {
   tour: Tour;
 }
 
+const formatPrice = (price: number): string => {
+  const formattedPrice = price.toLocaleString('vi-VN');
+  return `${formattedPrice}`;
+};
+
 const TourCardItem: React.FC<TourCardProps> = ({ tour }) => {
 
   const navigate = useNavigate();
   const handleClickBookNow = () => {
     navigate(`/tour/detail-tour/${tour.tour_id}`);
   };
+
+  useEffect(() => {
+    console.log(tour);
+  }, [])
 
   const coverImage = tour.images?.[0]?.image_url || '/placeholder.jpg';
 
@@ -35,7 +42,7 @@ const TourCardItem: React.FC<TourCardProps> = ({ tour }) => {
         </div>
 
         <div className='flex items-center gap-2 my-3'>
-          <FaPlane className='flex-shrink-0' style={{ color: '#FF6A00' }}/>
+          <FaPlaneDeparture className='flex-shrink-0' style={{ color: '#FF6A00' }}/>
           <span className='text-sm text-gray-600'>
             Khởi hành: {tour.departure_location}
           </span>
@@ -47,7 +54,10 @@ const TourCardItem: React.FC<TourCardProps> = ({ tour }) => {
             </Badge>
           ))}
         </div>
-      <div className='border-t-2 border-gray-300 my-6'></div>
+      <div className='border-t-2 border-gray-300 mt-6 mb-3'></div>
+      <div className='text-center mb-3'>
+        <h2 className='text-primary font-semibold '>{formatPrice(Number(tour.price_adult))} <span className='text-[26px]'>VNĐ</span></h2>
+      </div>
       <div className='flex justify-center mb-2'>
         <button onClick={handleClickBookNow} className='bg-orange-500 uppercase font-bold text-white py-2 px-4 rounded-lg w-full flex items-center justify-center'>
           Book now

@@ -8,6 +8,8 @@ import AboutPage from '../page/AboutPage';
 import TourPage from '@/page/TourPage';
 import DetailTour from '@/page/DetailTour';
 import CheckoutPage from '@/page/CheckoutPage';
+import ContactPage from '@/page/ContactPage';
+import PaymentSuccessPage from '@/page/PaymentSuccess';
 
 const AppRouter = () => {
     return (
@@ -48,6 +50,22 @@ const AppRouter = () => {
                     element={
                         <MainLayout>
                             <AboutPage />
+                        </MainLayout>
+                    }
+                />
+                <Route 
+                    path='/contact' 
+                    element={
+                        <MainLayout>
+                            <ContactPage />
+                        </MainLayout>
+                    }
+                />
+                <Route 
+                    path='/payment/success' 
+                    element={
+                        <MainLayout>
+                            <PaymentSuccessPage />
                         </MainLayout>
                     }
                 />
