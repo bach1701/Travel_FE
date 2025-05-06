@@ -87,7 +87,7 @@ const PaymentSuccessPage = () => {
         <div className="min-h-screen flex flex-col items-center justify-center px-4">
         <div className="text-center max-w-xl items-center">
             <div className="text-[42px] mt-6 mb-3 flex justify-center"><FaCheckCircle className="text-green-600"></FaCheckCircle></div>
-            <h2 className="font-bold mb-6">Booking Confirmed</h2>
+            <h2 className="font-bold mb-6">Checkout Confirmed</h2>
             <p className="mb-2">We’ve sent all the details to your email.</p>
             <p>You can also view your booking in your account.</p>
 

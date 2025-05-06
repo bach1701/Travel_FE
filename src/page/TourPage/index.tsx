@@ -18,8 +18,7 @@ import { useSearchParams } from 'react-router-dom';
 const TourPage = () => {
 
     const [searchParams] = useSearchParams();
-
-    // const searchParamsDeparture = searchParams.get('departure');
+    
     const searchParamsDestination = searchParams.get('destination');
     const searchParamsDate = searchParams.get('date');
     const searchParamsDuration = searchParams.get('duration');

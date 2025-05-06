@@ -10,11 +10,14 @@ import DetailTour from '@/page/DetailTour';
 import CheckoutPage from '@/page/CheckoutPage';
 import ContactPage from '@/page/ContactPage';
 import PaymentSuccessPage from '@/page/PaymentSuccess';
+import PaymentFailedPage from '@/page/PaymentFailedPage';
+import ProfilePage from '@/page/ProfilePage';
 
 const AppRouter = () => {
     return (
         <BrowserRouter>
             <Routes>
+                {/* User */}
                 <Route 
                     path='/login' 
                     element={
@@ -29,6 +32,15 @@ const AppRouter = () => {
                     <RegisterPage/>
                     } 
                 />
+                <Route 
+                    path='/profile' 
+                    element={
+                        <MainLayout>
+                            <ProfilePage/>
+                        </MainLayout>
+                    } 
+                />
+
                 <Route 
                     path='/' 
                     element={
@@ -66,6 +78,14 @@ const AppRouter = () => {
                     element={
                         <MainLayout>
                             <PaymentSuccessPage />
+                        </MainLayout>
+                    }
+                />
+                <Route 
+                    path='/payment/failed' 
+                    element={
+                        <MainLayout>
+                            <PaymentFailedPage />
                         </MainLayout>
                     }
                 />

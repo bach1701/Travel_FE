@@ -11,8 +11,8 @@ const AboutPage = () => {
                 breadcrumb={[
                     { label: 'Home', href: '/' },
                     { label: 'About', href: '/about' }
-                  ]}
-                  >
+                ]}
+            >
             </PageBanner>
             <OurStory />
         </div>

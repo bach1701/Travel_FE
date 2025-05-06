@@ -25,7 +25,7 @@ type BookingResponse = {
         tour_title: string,
         departure_date: string,
         departure_location: string
-        };
+    };
 };
 
 type PaymentResponse = {

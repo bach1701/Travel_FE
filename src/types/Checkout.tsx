@@ -32,3 +32,21 @@ export interface BookingRequest {
     passengers: Passenger[];
     order_notes: OrderNote;
 }
+
+export interface Booking {
+    booking_id: number,
+    departure_id: number,
+    user_id: number,
+    num_adults: number,
+    num_children_120_140: number,
+    num_children_100_120: number,
+    total_price: string,
+    booking_status: string,
+    special_requests: string,
+    booking_date: string,
+    tour_title: string,
+    departure_date: string,
+    departure_location: string,
+    start_date: string,
+    
+}
