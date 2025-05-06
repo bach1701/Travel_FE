@@ -48,11 +48,24 @@ const TourCardItem: React.FC<TourCardProps> = ({ tour }) => {
           </span>
         </div>
         <div className='mt-2 flex flex-wrap gap-2'>
-          {tour.destination.map((place, index) => (
+          { tour.destination.length > 3 ? (
+            <>
+              {tour.destination.slice(0,3).map((place,index) => (
+                <Badge key = {index} variant='secondary'>
+                  {place}
+                </Badge>
+              ))}
+              <Badge variant='secondary'>
+                +{tour.destination.length - 3}
+              </Badge>
+            </>
+          ) : (
+            tour.destination.map((place, index) => (
             <Badge key={index} variant='secondary'>
                 {place}
             </Badge>
-          ))}
+            ))
+          )}
         </div>
       <div className='border-t-2 border-gray-300 mt-6 mb-3'></div>
       <div className='text-center mb-3'>
