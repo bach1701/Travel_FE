@@ -2,7 +2,7 @@ import { baseURL } from "@/config/api";
 import { Invoice, InvoiceDetails } from "@/types/Invoice";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { FaCalendar, FaClock, FaDownload, FaHome, FaList, FaPlaneDeparture } from "react-icons/fa";
+import { FaCalendarAlt, FaCheckCircle, FaClock, FaDownload, FaHome, FaList, FaPlaneDeparture } from "react-icons/fa";
 import { FaPerson } from "react-icons/fa6";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import html2canvas from "html2canvas";
@@ -85,7 +85,8 @@ const PaymentSuccessPage = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center px-4">
-        <div className="text-center max-w-xl">
+        <div className="text-center max-w-xl items-center">
+            <div className="text-[42px] mt-6 mb-3 flex justify-center"><FaCheckCircle className="text-green-600"></FaCheckCircle></div>
             <h2 className="font-bold mb-6">Booking Confirmed</h2>
             <p className="mb-2">We’ve sent all the details to your email.</p>
             <p>You can also view your booking in your account.</p>
@@ -121,7 +122,7 @@ const PaymentSuccessPage = () => {
             <div className="flex flex-col">
                 <p className="mb-1 ">Date</p>
                 <h5 className="flex items-center gap-2 font-semibold">
-                    <FaCalendar className="text-primary"/>
+                    <FaCalendarAlt className="text-primary"/>
                     {invoice?.start_date ? new Date(invoice.start_date).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "long",
