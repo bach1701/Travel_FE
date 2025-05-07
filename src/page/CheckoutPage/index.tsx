@@ -13,6 +13,7 @@ import {
   Passenger,
 } from "@/types/Checkout";
 import ModelNotification from "@/components/ModelNotification";
+import { Promotion } from "@/types/Promotion";
 
 type BookingResponse = {
   messsage: string;
@@ -49,7 +50,13 @@ const CheckoutPage = () => {
   const [departure, setDeparture] = useState<TourDeparture | null>(null);
   const [isAgreeTerm, setIsAgreeTerm] = useState(false);
   const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [promotions, setPromotions] = useState<Promotion[] | null>(null);
+  const [promotionSelected, setPromotionSelected] = useState<Promotion | null>(
+    null
+  );
   const [orderNotes, setOrderNotes] = useState<OrderNote>({
     smoking: false,
     vegetarian: false,
@@ -236,22 +243,42 @@ const CheckoutPage = () => {
   const calculateTotalPrice = (): number => {
     if (!tour?.departures?.[0]) return 0;
     const departure = tour.departures[0];
-    return passengerTypes.reduce((total, type) => {
-      const count = passengers[type.key as keyof typeof passengers];
 
+    // 1. Tính tổng tiền trước discount
+    const subTotal = passengerTypes.reduce((total, type) => {
+      const count = passengers[type.key as keyof typeof passengers];
       let price = 0;
-      if (type.key === "adult") {
-        price = Number(departure.price_adult);
-      } else if (type.key === "child_120_140") {
-        price = Number(departure.price_child_120_140);
-      } else if (type.key === "child_100_120") {
-        price = Number(departure.price_child_100_120);
-      } else if (type.key === "baby") {
-        price = 0;
+
+      switch (type.key) {
+        case "adult":
+          price = Number(departure.price_adult);
+          break;
+        case "child_120_140":
+          price = Number(departure.price_child_120_140);
+          break;
+        case "child_100_120":
+          price = Number(departure.price_child_100_120);
+          break;
+        case "baby":
+          price = 0;
+          break;
       }
 
       return total + count * price;
     }, 0);
+
+    // 2. Tính discount sau khi có tổng tiền
+    let discount = 0;
+    if (promotionSelected) {
+      if (promotionSelected.type === "percent") {
+        discount = (Number(promotionSelected.discount) / 100) * subTotal;
+      } else if (promotionSelected.type === "fixed") {
+        discount = Number(promotionSelected.discount);
+      }
+    }
+
+    // 3. Trả về tổng tiền cuối cùng
+    return subTotal - discount;
   };
 
   const formatDate = (dateStr: string): string => {
@@ -287,6 +314,12 @@ const CheckoutPage = () => {
 
   // }
 
+  const handleSelectPromotion = (promotion: Promotion) => {
+    setSuccessMessage("Áp mã giảm giá thanh công!");
+    setIsSuccess(true);
+    setPromotionSelected(promotion);
+  };
+
   const handleCheckout = async (): Promise<void> => {
     if (!tour) return;
     if (isAgreeTerm === false) {
@@ -314,7 +347,7 @@ const CheckoutPage = () => {
         contact_info: contactInfo,
         passengers: passengerInfos,
         order_notes: orderNotes,
-        promotion_id: 0,
+        promotion_id: promotionSelected?.promotion_id || 0,
       };
 
       console.log("bookingDataRequest - ", bookingDataRequest);
@@ -391,6 +424,19 @@ const CheckoutPage = () => {
         console.log(err);
       }
     };
+
+    const fetchPublicPromotion = async () => {
+      try {
+        const response = await axios.get(
+          `${baseURL}/public/promotions/tours/${id}`
+        );
+        setPromotions(response.data.promotions);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchPublicPromotion();
     fetchDeparture();
     fetchDetailTour();
   }, [id, id_depa]);
@@ -657,6 +703,27 @@ const CheckoutPage = () => {
             Apply
           </button>
         </div>
+        <div className="w-full flex mt-6 gap-2">
+          {promotions?.map((promotion, index) => (
+            <div key={index} className="w-[50%] flex">
+              <>
+                <input
+                  value={promotion.name}
+                  className="w-2/4 border border-primary uppercase p-2"
+                  type="text"
+                />
+                <button
+                  onClick={() => handleSelectPromotion(promotion)}
+                  className="w-2/4 uppercase font-semibold bg-primary text-white p-2"
+                >
+                  {promotion.type === "percent"
+                    ? `-${promotion.discount}%`
+                    : `-${formatPrice(Number(promotion.discount))}VNĐ`}
+                </button>
+              </>
+            </div>
+          ))}
+        </div>
         <div className="border my-5"></div>
         <div className="space-y-4">
           <CustomRadioButton
@@ -700,7 +767,7 @@ const CheckoutPage = () => {
           <ModelNotification
             type="success"
             message="Thành công!"
-            description="Thao tác đã được thực hiện thành công."
+            description={successMessage || "Thực hiện thao tác thành công!"}
             onClose={handleCloseNotification}
           />
         )}
