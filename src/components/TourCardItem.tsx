@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Tour } from "@/types/Tour";
-import { FaClock, FaPlaneDeparture, FaPaperPlane } from "react-icons/fa";
+import { FaClock, FaPlaneDeparture } from "react-icons/fa";
 import { Card, CardContent } from "./ui/CardItem";
 import { Badge } from "./ui/BadgeItem";
 import { useNavigate } from "react-router-dom";
