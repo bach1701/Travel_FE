@@ -5,7 +5,7 @@ import { useUserProfile } from "../hooks/useUserProfile";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const user = useUserProfile();
+  const { user, isLoading } = useUserProfile();
   const location = useLocation();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -32,6 +32,16 @@ const Header: React.FC = () => {
     localStorage.removeItem("AccessToken");
     navigate("/login");
   };
+
+  if (isLoading) {
+    return (
+      <header className="fixed top-0 left-0 w-full h-[96px] bg-white shadow-md z-50 flex items-center justify-between px-8">
+        <div className="w-24 h-24"></div>
+        <div className="flex-1"></div>
+        <div className="w-40 h-12"></div>
+      </header>
+    );
+  }
 
   return (
     <header className="fixed top-0 left-0 w-full h-[96px] bg-white shadow-md z-50 flex items-center justify-between px-8">
@@ -75,14 +85,6 @@ const Header: React.FC = () => {
           }`}
         >
           Tour
-        </Link>
-        <Link
-          to="/blog"
-          className={`px-2 transition hover:text-primary ${
-            location.pathname === "/blog" ? "text-primary" : ""
-          }`}
-        >
-          Blog
         </Link>
         <Link
           to="/contact"
