@@ -14,6 +14,7 @@ import hcm2 from "../../assets/image/destination/south/hcm.jpg";
 import baria from "../../assets/image/destination/south/vungtau.jpg";
 import hanoi from "../../assets/image/destination/north/hn.jpg";
 import sapa from "../../assets/image/destination/north/sapa.jpg";
+import { useNavigate } from "react-router-dom";
 
 const DestinationPage = () => {
   const destinationNorth = [
@@ -87,6 +88,14 @@ const DestinationPage = () => {
       description: "Discover more...",
     },
   ];
+
+  const navigator = useNavigate();
+
+  const handleSearchRegion = (region: Number) => {
+    const params = new URLSearchParams();
+    params.append("region", region.toString());
+    navigator(`/tour?${params.toString()}`);
+  };
 
   return (
     <div>
@@ -171,7 +180,10 @@ const DestinationPage = () => {
                   </p>
                 </div>
                 <button className="absolute bottom-4 right-4 bg-primary text-white rounded-full p-2 hover:bg-primary-dark focus:outline-none">
-                  <FaArrowRight className="h-5 w-5" />
+                  <FaArrowRight
+                    onClick={() => handleSearchRegion(1)}
+                    className="h-5 w-5"
+                  />
                 </button>
               </div>
             ))}
@@ -231,7 +243,10 @@ const DestinationPage = () => {
                   </p>
                 </div>
                 <button className="absolute bottom-4 right-4 bg-primary text-white rounded-full p-2 hover:bg-primary-dark focus:outline-none">
-                  <FaArrowRight className="h-5 w-5" />
+                  <FaArrowRight
+                    onClick={() => handleSearchRegion(2)}
+                    className="h-5 w-5"
+                  />
                 </button>
               </div>
             ))}
@@ -291,14 +306,17 @@ const DestinationPage = () => {
                   </p>
                 </div>
                 <button className="absolute bottom-4 right-4 bg-primary text-white rounded-full p-2 hover:bg-primary-dark focus:outline-none">
-                  <FaArrowRight className="h-5 w-5" />
+                  <FaArrowRight
+                    onClick={() => handleSearchRegion(3)}
+                    className="h-5 w-5"
+                  />
                 </button>
               </div>
             ))}
           </div>
           <div className="flex justify-center items-center">
             <button className="flex py-2 px-4 text-[24px] font-semibold rounded-xl bg-primary text-white items-center ">
-              Explore more{" "}
+              Explore more
               <FaArrowRight className="text-[24px] ml-2"></FaArrowRight>
             </button>
           </div>

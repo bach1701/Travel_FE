@@ -2,11 +2,13 @@ import north from "../../assets/image/home/destination/mapileng.jpg";
 import central from "../../assets/image/home/destination/phu-yen.webp";
 import south from "../../assets/image/home/destination/mt3.webp";
 import { FaArrowRight } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Destination = () => {
   const destinations = [
     {
       loca: "Nothern Vietnam",
+      region: 1,
       img: north,
       des_vn:
         "Miền Bắc nổi bật với núi non trùng điệp và cảnh sắc thiên nhiên hùng vĩ. Một hành trình lý tưởng cho những ai yêu khám phá thiên nhiên và hoài cổ.",
@@ -15,6 +17,7 @@ const Destination = () => {
     },
     {
       loca: "The central of Vietnam",
+      region: 2,
       img: central,
       des_vn:
         "Miền Trung gây ấn tượng với đường bờ biển dài, nắng vàng, làn nước trong xanh. Đây là điểm đến lý tưởng cho những kỳ nghỉ thư giãn đầy cảm hứng.",
@@ -23,6 +26,7 @@ const Destination = () => {
     },
     {
       loca: "Southern Vietnam",
+      region: 3,
       img: south,
       des_vn:
         "Miền Nam mang đậm bản sắc sông nước với những khu chợ nổi và hệ thống kênh rạch đặc trưng. Cuộc sống nơi đây gần gũi và hiếu khách nên phù hợp cho những chuyển đi tìm hiểu cuộc con người",
@@ -30,6 +34,15 @@ const Destination = () => {
         "The South has a strong river identity with floating markets and a typical canal system. Life here is close and hospitable, so it is suitable for trips to explore human life.",
     },
   ];
+
+  const navigate = useNavigate();
+
+  const handleSearchRegion = (region: Number) => {
+    const params = new URLSearchParams();
+    params.append("region", region.toString());
+    navigate(`/tour?${params.toString()}`);
+  };
+
   return (
     <div className="text-center mt-24 mb-12 pb-24">
       <h2 className="pb-4 font-bold">Destination</h2>
@@ -44,12 +57,17 @@ const Destination = () => {
             <p className="text-left px-8 pb-4">{destination.des_eng}</p>
             <div className="flex items-center justify-start px-8 pb-4">
               <p
-                className="text-primary uppercase font-bold"
+                onClick={() => handleSearchRegion(destination.region)}
+                className="text-primary uppercase font-bold cursor-pointer"
                 style={{ fontSize: "14px", marginRight: "10px" }}
               >
                 See more
               </p>
-              <FaArrowRight style={{ color: "#FF6A00", fontSize: "20px" }} />
+              <FaArrowRight
+                onClick={() => handleSearchRegion(1)}
+                className="cursor-pointer"
+                style={{ color: "#FF6A00", fontSize: "20px" }}
+              />
             </div>
           </div>
         ))}

@@ -405,7 +405,7 @@ const Review = ({ id }: { id: string }) => {
               <div className="flex justify-center w-full">
                 <button
                   onClick={handleCreateReview}
-                  className="bg-primary hover:bg-orange-600 text-white rounded- font-semibold uppercase p-4 px-8 items-center"
+                  className="bg-primary hover:bg-orange-600 text-white text-[20px] rounded-xl font-bold uppercase p-4 px-8 items-center"
                 >
                   Send review
                 </button>
@@ -445,7 +445,7 @@ const Review = ({ id }: { id: string }) => {
               <div className="flex justify-center w-full">
                 <button
                   onClick={handleCreateReview}
-                  className="bg-primary hover:bg-orange-600 text-white rounded- font-semibold uppercase p-4 px-8 items-center"
+                  className="bg-primary text-[20px] rounded-xl hover:bg-orange-600 text-white rounded- font-bold uppercase p-4 px-8 items-center"
                 >
                   Send review
                 </button>

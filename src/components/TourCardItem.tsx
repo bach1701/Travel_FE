@@ -35,9 +35,11 @@ const TourCardItem: React.FC<TourCardProps> = ({ tour }) => {
         className="w-full h-48 object-cover rounded-lg"
       />
       <CardContent>
-        <h2 className="font-semibold text-base mb-1.5 line-clamp-2 mt-3">
-          {tour.title}
-        </h2>
+        <div className="relative h-12">
+          <h2 className="font-semibold text-base mb-1.5 mt-3 line-clamp-2 tour-title">
+            {tour.title}
+          </h2>
+        </div>
         <div className="flex items-center gap-2 my-3">
           <FaClock className="flex-shrink-0" style={{ color: "#FF6A00" }} />
           <span className="text-sm text-gray-600">

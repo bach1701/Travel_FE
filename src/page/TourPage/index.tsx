@@ -18,17 +18,21 @@ import { RootState, AppDispatch } from "../../redux/store";
 import { destinationRegionMap } from "@/utils/locationRegions";
 import { Pagination } from "@/types/Pagination";
 import { baseURL } from "@/config/api";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 
 const TourPage = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const searchParamsDestination = searchParams.get("destination");
   const searchParamsDate = searchParams.get("date");
   const searchParamsDuration = searchParams.get("duration");
+  const searchParamsRegion = searchParams.get("region");
 
-  const [region, setRegion] = useState<number | null>(0);
+  const [region, setRegion] = useState<number | null>(
+    searchParamsRegion ? parseInt(searchParamsRegion) : 0
+  );
   const [departureDate, setDepartureDate] = useState<string>(
     searchParamsDate || ""
   );
@@ -96,6 +100,11 @@ const TourPage = () => {
         if (people !== "") {
           params.people_range = people;
         }
+
+        const queryString = new URLSearchParams(params).toString();
+
+        navigate(`/tour?${queryString}`);
+
         const res = await axios.get(`${baseURL}/public/tours/search`, {
           params: params,
         });
@@ -128,6 +137,7 @@ const TourPage = () => {
     duration,
     people,
     departureDate,
+    navigate,
   ]);
 
   return (
