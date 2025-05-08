@@ -189,8 +189,11 @@ const DestinationPage = () => {
             ))}
           </div>
           <div className="flex justify-center items-center">
-            <button className="flex py-2 px-4 text-[24px] font-semibold rounded-xl bg-primary text-white items-center ">
-              Explore more{" "}
+            <button
+              onClick={() => handleSearchRegion(3)}
+              className="flex py-2 px-4 text-[24px] font-semibold rounded-xl bg-primary text-white items-center "
+            >
+              Explore more
               <FaArrowRight className="text-[24px] ml-2"></FaArrowRight>
             </button>
           </div>
@@ -252,8 +255,11 @@ const DestinationPage = () => {
             ))}
           </div>
           <div className="flex justify-center items-center">
-            <button className="flex py-2 px-4 text-[24px] font-semibold rounded-xl bg-primary text-white items-center ">
-              Explore more{" "}
+            <button
+              onClick={() => handleSearchRegion(3)}
+              className="flex py-2 px-4 text-[24px] font-semibold rounded-xl bg-primary text-white items-center "
+            >
+              Explore more
               <FaArrowRight className="text-[24px] ml-2"></FaArrowRight>
             </button>
           </div>
@@ -315,7 +321,10 @@ const DestinationPage = () => {
             ))}
           </div>
           <div className="flex justify-center items-center">
-            <button className="flex py-2 px-4 text-[24px] font-semibold rounded-xl bg-primary text-white items-center ">
+            <button
+              onClick={() => handleSearchRegion(3)}
+              className="flex py-2 px-4 text-[24px] font-semibold rounded-xl bg-primary text-white items-center "
+            >
               Explore more
               <FaArrowRight className="text-[24px] ml-2"></FaArrowRight>
             </button>

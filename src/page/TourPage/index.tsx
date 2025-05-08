@@ -29,6 +29,7 @@ const TourPage = () => {
   const searchParamsDate = searchParams.get("date");
   const searchParamsDuration = searchParams.get("duration");
   const searchParamsRegion = searchParams.get("region");
+  const searchParamsDeparture = searchParams.get("departure");
 
   const [region, setRegion] = useState<number | null>(
     searchParamsRegion ? parseInt(searchParamsRegion) : 0
@@ -41,7 +42,9 @@ const TourPage = () => {
   const [showPeopleOptions, setShowPeopleOptions] = useState(false);
   const [people, setPeople] = useState("");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000000]);
-  const [selectedDeparture, setSelectedDeparture] = useState("");
+  const [selectedDeparture, setSelectedDeparture] = useState<string>(
+    searchParamsDeparture || ""
+  );
   const [selectedDestination, setSelectedDestination] = useState<string>(
     searchParamsDestination || ""
   );
@@ -89,6 +92,10 @@ const TourPage = () => {
           params.destination = selectedDestination;
         }
 
+        if (selectedDeparture !== "") {
+          params.departure_location = selectedDeparture;
+        }
+
         if (duration) {
           params.duration_range = duration;
         }
@@ -133,6 +140,7 @@ const TourPage = () => {
   }, [
     region,
     selectedDestination,
+    selectedDeparture,
     priceRange,
     duration,
     people,
@@ -212,7 +220,7 @@ const TourPage = () => {
                   className="block text-sm font-medium mb-2"
                   style={{ fontSize: "20px" }}
                 >
-                  Điểm đi
+                  Điểm đến
                 </label>
                 <div className="flex items-center border rounded-md p-2">
                   <FaMapMarkerAlt
