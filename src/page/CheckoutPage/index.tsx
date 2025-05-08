@@ -76,8 +76,8 @@ const CheckoutPage = () => {
   const [passengers, setPassengers] = useState({
     adult: 0,
     baby: 0,
-    child_120_140: 0,
-    child_100_120: 0,
+    children_120_140: 0,
+    children_100_120: 0,
   });
 
   const [specialRequire, setSpecialRequire] = useState<string>("");
@@ -141,8 +141,8 @@ const CheckoutPage = () => {
   const passengerTypes = [
     { label: "Adult", key: "adult" },
     { label: "Baby", key: "baby" },
-    { label: "Child (120cm-140cm)", key: "child_120_140" },
-    { label: "Child (100cm-120cm)", key: "child_100_120" },
+    { label: "Child (120cm-140cm)", key: "children_120_140" },
+    { label: "Child (100cm-120cm)", key: "children_100_120" },
   ];
 
   const renderPassengerForms = () => {
@@ -158,8 +158,8 @@ const CheckoutPage = () => {
             birthday: "",
             ticket_type: key as
               | "adult"
-              | "child_120_140"
-              | "child_100_120"
+              | "children_120_140"
+              | "children_100_120"
               | "baby",
           });
         }
@@ -241,23 +241,21 @@ const CheckoutPage = () => {
   };
 
   const calculateTotalPrice = (): number => {
-    if (!tour?.departures?.[0]) return 0;
-    const departure = tour.departures[0];
+    if (!id_depa) return 0;
 
-    // 1. Tính tổng tiền trước discount
     const subTotal = passengerTypes.reduce((total, type) => {
       const count = passengers[type.key as keyof typeof passengers];
       let price = 0;
 
       switch (type.key) {
         case "adult":
-          price = Number(departure.price_adult);
+          price = Number(departure?.price_adult);
           break;
-        case "child_120_140":
-          price = Number(departure.price_child_120_140);
+        case "children_120_140":
+          price = Number(departure?.price_child_120_140);
           break;
-        case "child_100_120":
-          price = Number(departure.price_child_100_120);
+        case "children_100_120":
+          price = Number(departure?.price_child_100_120);
           break;
         case "baby":
           price = 0;
@@ -267,7 +265,6 @@ const CheckoutPage = () => {
       return total + count * price;
     }, 0);
 
-    // 2. Tính discount sau khi có tổng tiền
     let discount = 0;
     if (promotionSelected) {
       if (promotionSelected.type === "percent") {
@@ -277,7 +274,6 @@ const CheckoutPage = () => {
       }
     }
 
-    // 3. Trả về tổng tiền cuối cùng
     return subTotal - discount;
   };
 
@@ -341,8 +337,8 @@ const CheckoutPage = () => {
       const bookingDataRequest: BookingRequest = {
         departure_id: Number(id_depa),
         num_adults: passengers.adult,
-        num_children_120_140: passengers.child_120_140,
-        num_children_100_120: passengers.child_100_120,
+        num_children_120_140: passengers.children_120_140,
+        num_children_100_120: passengers.children_100_120,
         special_requests: specialRequire,
         contact_info: contactInfo,
         passengers: passengerInfos,
@@ -538,8 +534,8 @@ const CheckoutPage = () => {
             {[
               { label: "Adult", key: "adult" },
               { label: "Baby", key: "baby" },
-              { label: "Child (120cm-140cm)", key: "child_120_140" },
-              { label: "Child (100cm-120cm)", key: "child_100_120" },
+              { label: "Child (120cm-140cm)", key: "children_120_140" },
+              { label: "Child (100cm-120cm)", key: "children_100_120" },
             ].map(({ label, key }) => (
               <div
                 key={key}
@@ -671,12 +667,12 @@ const CheckoutPage = () => {
             },
             {
               label: "Child (120cm-140cm)",
-              key: "child_120_140",
+              key: "children_120_140",
               price: `${departure?.price_child_120_140}`,
             },
             {
               label: "Child (100cm-120cm)",
-              key: "child_100_120",
+              key: "children_100_120",
               price: `${departure?.price_child_100_120}`,
             },
             { label: "Baby", key: "baby", price: "0" },
