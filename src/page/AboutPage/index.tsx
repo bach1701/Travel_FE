@@ -1,6 +1,9 @@
 import PageBanner from "@/components/ui/Banner";
 import aboutImage from "../../assets/image/banner/bg.svg";
 import OurStory from "./OurStory";
+import Cooparature from "./Cooparature";
+import Member from "./Member";
+import OurValue from "./OurValue";
 
 const AboutPage = () => {
   return (
@@ -14,6 +17,9 @@ const AboutPage = () => {
         ]}
       ></PageBanner>
       <OurStory />
+      <Cooparature />
+      <Member />
+      <OurValue />
     </div>
   );
 };
