@@ -1,6 +1,5 @@
-import { FaCompass, FaHeart, FaNetworkWired, FaTasks } from "react-icons/fa";
+import { FaCompass, FaHeart, FaTasks } from "react-icons/fa";
 import bgCoop from "../../assets/image/about/cooparature.svg";
-import { title } from "process";
 
 const Cooparature = () => {
   const contentCooparature = [
