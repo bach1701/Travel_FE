@@ -23,9 +23,11 @@ import StarRatings from "react-star-ratings";
 import { ReviewResponse } from "../TourPage/ReviewType";
 import BookNowButton from "@/components/ui/ButtonPrimary";
 import { ClipLoader } from "react-spinners";
+import Review from "./Review";
 
 const DetailTour = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const tourId = id || "";
   const [tour, setTour] = useState<Tour | null>(null);
   const [itinerary, setItinerary] = useState<TourItinerary[]>([]);
   const [image, setImage] = useState<TourImage[]>([]);
@@ -432,7 +434,7 @@ const DetailTour = () => {
                       </div>
                     </div>
                     <div className="border border-primary mx-6 mt-12 mb-12"></div>
-                    <div className="mt-8">
+                    {/* <div className="mt-8">
                       <div className="flex items-center gap-2 text-lg mb-8 font-semibold text-primary">
                         <FaHeart style={{ color: "#FF6A00" }} />
                         <h3 style={{ fontSize: "24px" }}>Review</h3>
@@ -703,7 +705,8 @@ const DetailTour = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
+                    <Review id={tourId}></Review>
                     <div className="border border-primary mx-6 mt-12 mb-12"></div>
                   </div>
                 </div>
