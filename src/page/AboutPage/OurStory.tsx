@@ -1,9 +1,5 @@
 import building from "../../assets/image/about/building.svg";
 import { FaArrowRight, FaPaperPlane } from "react-icons/fa";
-import cop from "../../assets/image/about/cop.svg";
-import member from "../../assets/image/about/member.svg";
-import value from "../../assets/image/about/value.svg";
-import method from "../../assets/image/about/methodpay.svg";
 
 const OurStory = () => {
   return (
@@ -41,24 +37,6 @@ const OurStory = () => {
             width: "430px",
             height: "500px",
           }}
-        ></div>
-      </div>
-      <div
-        className="w-full h-[800px] bg-cover bg-no-repeat rounded-lg mb-24"
-        style={{ backgroundImage: `url(${cop})` }}
-      ></div>
-      <div className="px-24">
-        <div
-          className="w-full h-[860px] bg-cover bg-no-repeat rounded-lg mb-24"
-          style={{ backgroundImage: `url(${member})` }}
-        ></div>
-        <div
-          className="w-full h-[600px] bg-cover bg-no-repeat rounded-lg mb-24"
-          style={{ backgroundImage: `url(${value})` }}
-        ></div>
-        <div
-          className="w-full h-[250px] bg-cover bg-no-repeat rounded-lg mb-24"
-          style={{ backgroundImage: `url(${method})` }}
         ></div>
       </div>
     </div>

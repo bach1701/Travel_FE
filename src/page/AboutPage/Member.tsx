@@ -5,12 +5,12 @@ import designer from "../../assets/image/about/member/designer.svg";
 const Member = () => {
   return (
     <div className="text-center">
-      <h2 className="font-semibold text-[48px] mb-10 mt-24">
+      <h2 className="font-semibold text-[48px] mt-24">
         Our Expert Team Member
       </h2>
-      <p className="text-[20px] text-gray-600">
+      <p className="text-[20px] mt-6 text-gray-600">
         Our team of passionate travelers and industry experts work tirelessly to
-        create exceptional experiences for every Wanderlust adventure.
+        create <br /> exceptional experiences for every Wanderlust adventure.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3">
         <div
@@ -18,7 +18,7 @@ const Member = () => {
           style={{
             backgroundImage: `url(${designer})`,
             width: "33vw",
-            height: "100vh",
+            height: "80vh",
           }}
         ></div>
         <div
@@ -26,7 +26,7 @@ const Member = () => {
           style={{
             backgroundImage: `url(${dev1})`,
             width: "33vw",
-            height: "100vh",
+            height: "80vh",
           }}
         ></div>
         <div
@@ -34,7 +34,7 @@ const Member = () => {
           style={{
             backgroundImage: `url(${dev2})`,
             width: "33vw",
-            height: "100vh",
+            height: "80vh",
           }}
         ></div>
       </div>
