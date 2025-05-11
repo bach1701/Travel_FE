@@ -1,18 +1,21 @@
 import PageBanner from "@/components/ui/Banner";
 import bg from "../../assets/image/profile/bg.jpg";
 import { FaEdit, FaUserEdit } from "react-icons/fa";
-import { FaLocationPin } from "react-icons/fa6";
+import { FaLocationDot } from "react-icons/fa6";
 import { baseURL } from "@/config/api";
 import axios from "axios";
 import { Profile } from "@/types/Profile";
 import { useEffect, useState } from "react";
 import ModelNotification from "@/components/ModelNotification";
+import { UserBooking } from "@/types/UserProfile/UserBooking";
 
 const ProfilePage = () => {
   const [isSuccess, setIsSuccess] = useState<Boolean | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const [previewAvatar, setPreviewAvatar] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<string>('personal-information');
+  const [historyBooking, setHistoryBooking] = useState<UserBooking[]>([]);
 
   const [profile, setProfile] = useState<Profile>({
     id: 0,
@@ -82,6 +85,10 @@ const ProfilePage = () => {
     setErrorMessage(null);
   };
 
+  const handleChangeActiveTab = (active: string): void => {
+    setActiveTab(active);
+  }
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -94,7 +101,24 @@ const ProfilePage = () => {
       }
     };
 
+    // const fetchUserReview = async () => {
+    //   try {
+    //     const resReview = await axios.get(`${baseURL}/`)
+    //   }
+    // }
+
+    const fetchUserBooking = async () => {
+      try {
+        const resBooking = await axios.get(`${baseURL}/user/bookings/confirmed`, { headers });
+        setHistoryBooking(resBooking.data.bookings);
+        console.log(resBooking.data.bookings);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     fetchProfile();
+    fetchUserBooking();
   }, []);
 
   return (
@@ -119,12 +143,12 @@ const ProfilePage = () => {
       <div className="px-36 mt-12 flex">
         <div className="w-1/4 mt-32">
           <div className="flex flex-col gap-4 text-sm font-medium">
-            <h5 className="text-primary border-l-4 border-primary pl-2">
+            <h5 onClick={() => handleChangeActiveTab('personal-information')} className={activeTab === 'personal-information' ? "text-primary border-l-4 border-primary pl-2" : "cursor-pointer"}>
               Personal Information
             </h5>
-            <h5>Booking History (4)</h5>
-            <h5>Review History (7)</h5>
-            <h5>Account Setting</h5>
+            <h5 onClick={() => handleChangeActiveTab('booking-history')} className={activeTab === 'booking-history' ?  "text-primary border-l-4 border-primary pl-2" : 'cursor-pointer'}>Booking History (4)</h5>
+            <h5 onClick={() => handleChangeActiveTab('review-history')} className={activeTab === 'review-history' ?  "text-primary border-l-4 border-primary pl-2" : 'cursor-pointer'}>Review History (7)</h5>
+            <h5  onClick={() => handleChangeActiveTab('account-setting')} className={activeTab === 'account-setting' ?  "text-primary border-l-4 border-primary pl-2" : 'cursor-pointer'}>Account Setting</h5>
           </div>
         </div>
         <div className="w-3/4">
@@ -134,11 +158,89 @@ const ProfilePage = () => {
               <FaEdit className="text-primary ml-2 cursor-pointer" />
             </h2>
             <p className="flex items-center text-gray-500 mt-1">
-              <FaLocationPin className="text-primary mr-1" />
+              <FaLocationDot className="text-primary mr-1" />
               {profile?.address}
             </p>
           </div>
-          <div className="border border-gray-300 rounded-md px-8 py-6 bg-white shadow-sm">
+          {activeTab === 'personal-information' && (
+            <div className="border border-gray-300 rounded-md px-8 py-6 bg-white shadow-sm">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="font-semibold my-2">Full Name</p>
+                  <input
+                    value={profile?.name}
+                    onChange={(e) =>
+                      setProfile({ ...profile, name: e.target.value })
+                    }
+                    type="text"
+                    className="border border-gray-300 rounded-md w-full h-10 px-2"
+                  />
+                </div>
+                <div>
+                  <p className="font-semibold my-2">Phone</p>
+                  <input
+                    value={profile?.phone_number}
+                    onChange={(e) =>
+                      setProfile({ ...profile, phone_number: e.target.value })
+                    }
+                    type="text"
+                    className="border border-gray-300 rounded-md w-full h-10 px-2"
+                  />
+                </div>
+              </div>
+              <p className="font-semibold my-2">Email</p>
+              <input
+                value={profile?.email}
+                onChange={(e) =>
+                  setProfile({ ...profile, email: e.target.value })
+                }
+                type="email"
+                className="border border-gray-300 rounded-md w-full h-10 px-2"
+              />
+              <p className="font-semibold my-2">Address</p>
+              <input
+                value={profile?.address}
+                onChange={(e) =>
+                  setProfile({ ...profile, address: e.target.value })
+                }
+                type="text"
+                className="border border-gray-300 rounded-md w-full h-10 px-2"
+              />
+              <div className="flex justify-center">
+                <button
+                  onClick={handleEditProfile}
+                  className="bg-primary text-white p-2 uppercase rounded-lg mt-4 items-center font-semibold justify-center"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          )}
+          {activeTab === 'booking-history' && (
+            <div className="bg-white rounded-xl border border-gray-300"> 
+              {historyBooking?.length > 0? (
+                 historyBooking.map((booking) => (
+                  <div key={booking?.booking_id} className="mb-6 border-b border-gray-200 pb-4 last:border-b-0">
+                    <h3 className="text-lg font-semibold text-gray-800">{booking.tour_title || 'No Title'}</h3>
+                    {/* <p className="text-sm text-gray-600 mt-1">
+                      Departure Date: {new Date(booking.departureDate).toLocaleDateString()}
+                    </p> */}
+                    <div className="flex justify-end mt-2">
+                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                        Xem hóa đơn
+                      </button>
+                      <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        Viết review
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500">Bạn chưa có lịch sử đặt phòng nào.</p>
+              )}
+            </div>
+          )}
+          {/* <div className="border border-gray-300 rounded-md px-8 py-6 bg-white shadow-sm">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="font-semibold my-2">Full Name</p>
@@ -189,7 +291,7 @@ const ProfilePage = () => {
                 Save
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       {isSuccess === true && (

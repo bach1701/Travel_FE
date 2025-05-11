@@ -17,7 +17,7 @@ const Review = ({ id }: { id: string }) => {
   const [reviewTour, setReviewTour] = useState<ReviewResponse | null>(null);
   const [dataReviewRequest, setDataReviewRequest] = useState<ReviewRequest>({
     tour_id: parseInt(id),
-    departure_id: "6",
+    departure_id: "",
     comment: "",
     ratings: {
       Foods: 0,
@@ -95,7 +95,7 @@ const Review = ({ id }: { id: string }) => {
     }
 
     try {
-      await axios.post(`${baseURL}/user/reviews`, dataReviewRequest, {
+      await axios.post(`${baseURL}/user/reviews/simple`, dataReviewRequest, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       console.log("Review data:", dataReviewRequest);
