@@ -3,19 +3,23 @@ import { UserBooking } from "@/types/UserProfile/UserBooking";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
-import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { useUserProfile } from "@/hooks/useUserProfile";
 import ModalWriteReview from "./ModalWriteReview";
 import ReactModal from "react-modal";
-import { FaCross } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
+import { Pagination } from "antd";
+import "antd/dist/reset.css";
 
 const BookingHistory = () => {
   const [historyBooking, setHistoryBooking] = useState<UserBooking[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isOpenModalReview, setIsOpenModalReview] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(6);
+  const [totalPage, setTotalPage] = useState<number>(0);
+  const [totalItem, setTotalItem] = useState<number>(0);
   const [bookingReviewSelected, setBookingReviewSelected] = useState<
-    number | null
+    [number, number] | null
   >(null);
   const navigator = useNavigate();
 
@@ -41,9 +45,9 @@ const BookingHistory = () => {
     navigator(`/payment/success?payment_method=stripe&booking_id=${bookingID}`);
   };
 
-  const handleWriteReview = (bookingID: number): void => {
-    setBookingReviewSelected(bookingID); // Lưu booking_id khi nút được click
-    setIsOpenModalReview(true); // Mở modal
+  const handleWriteReview = (tour_id: number, departure_id: number): void => {
+    setBookingReviewSelected([tour_id, departure_id]);
+    setIsOpenModalReview(true);
   };
 
   const handleCloseModalReview = (): void => {
@@ -65,10 +69,18 @@ const BookingHistory = () => {
       try {
         const resBooking = await axios.get(
           `${baseURL}/user/bookings/confirmed`,
-          { headers }
+          {
+            headers,
+            params: {
+              page: currentPage,
+              limit: pageSize,
+            },
+          }
         );
+
         setHistoryBooking(resBooking.data.bookings);
-        console.log(resBooking.data.bookings);
+        setTotalItem(resBooking.data.pagination.totalItems);
+        setTotalPage(resBooking.data.pagination.totalPages);
       } catch (err) {
         console.log(err);
       } finally {
@@ -77,7 +89,24 @@ const BookingHistory = () => {
     };
 
     fetchUserBooking();
-  }, []);
+  }, [currentPage, pageSize]);
+
+  const customModalClasses = {
+    overlay:
+      "fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center",
+    content:
+      "relative mx-auto bg-white p-6 rounded-lg shadow-lg outline-none w-11/12 max-w-3xl max-h-[90vh] overflow-auto",
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (value: number) => {
+    setPageSize(value);
+    setCurrentPage(1);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -97,6 +126,7 @@ const BookingHistory = () => {
               <table className="w-full table-auto rounded-xl">
                 <thead className="bg-gray-100 rounded-xl">
                   <tr>
+                    <th className="px-4 py-2 text-left">Booking ID</th>
                     <th className="px-4 py-2 text-left">Tiêu Đề Tour</th>
                     <th className="px-4 py-2 text-left">Ngày Đặt</th>
                     <th className="px-4 py-2 text-left">Khởi Hành</th>
@@ -111,6 +141,9 @@ const BookingHistory = () => {
                       key={booking?.booking_id}
                       className="border-b border-gray-200"
                     >
+                      <td className="px-4 py-2">
+                        #B&P_{booking.booking_id || "Không có tiêu đề"}
+                      </td>
                       <td className="px-4 py-2">
                         {booking.tour_title || "Không có tiêu đề"}
                       </td>
@@ -143,7 +176,12 @@ const BookingHistory = () => {
                           Xem hóa đơn
                         </button>
                         <button
-                          onClick={() => handleWriteReview(booking.booking_id)}
+                          onClick={() =>
+                            handleWriteReview(
+                              booking.tour_id,
+                              booking.departure_id
+                            )
+                          }
                           className="bg-blue-500 mt-2 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-sm"
                         >
                           Viết đánh giá
@@ -159,25 +197,55 @@ const BookingHistory = () => {
               </p>
             )}
           </div>
+          <div className="mt-6 flex justify-center">
+            {totalPage > 1 && (
+              <Pagination
+                current={currentPage}
+                total={totalItem}
+                pageSize={pageSize}
+                onChange={handlePageChange}
+                pageSizeOptions={["6", "9", "12"]}
+                showSizeChanger
+                onShowSizeChange={(_item, size) => handlePageSizeChange(size)}
+                itemRender={(_page, type, originalElement) => {
+                  if (type === "prev") {
+                    return <a>Previous</a>;
+                  }
+                  if (type === "next") {
+                    return <a>Next</a>;
+                  }
+                  return originalElement;
+                }}
+              />
+            )}
+          </div>
         </div>
       )}
       <ReactModal
         isOpen={isOpenModalReview}
         onRequestClose={handleCloseModalReview}
-        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md shadow-xl p-6 max-w-sm"
-        overlayClassName="fixed top-0 left-0 right-0 bottom-0 bg-gray-500 opacity-75 flex justify-center items-center" // Cập nhật overlayClassName
+        className={customModalClasses.content}
+        overlayClassName={customModalClasses.overlay}
         ariaHideApp={false}
+        contentLabel="Modal Write Review"
       >
-        <h2 className="text-lg font-semibold mb-4">Viết đánh giá tour</h2>
-        {bookingReviewSelected !== null && (
-          <ModalWriteReview id={bookingReviewSelected.toString()} />
-        )}
-        <button
-          onClick={handleCloseModalReview}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 focus:outline-none"
-        >
-          <FaCross size={20} />
-        </button>
+        <div className="relative">
+          <button
+            onClick={handleCloseModalReview}
+            className="absolute top-0 right-0 text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            <IoMdClose size={36} />
+          </button>
+          <div className="mt-4">
+            {bookingReviewSelected !== null && (
+              <ModalWriteReview
+                tour_id={bookingReviewSelected[0].toString()}
+                departure_id={bookingReviewSelected[1].toString()}
+                onReviewSubmitted={handleCloseModalReview}
+              />
+            )}
+          </div>
+        </div>
       </ReactModal>
     </>
   );

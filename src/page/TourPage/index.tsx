@@ -16,7 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchLocations } from "../../redux/locationSlice";
 import { RootState, AppDispatch } from "../../redux/store";
 import { destinationRegionMap } from "@/utils/locationRegions";
-import { Pagination } from "@/types/Pagination";
 import { baseURL } from "@/config/api";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
@@ -49,7 +48,6 @@ const TourPage = () => {
     searchParamsDestination || ""
   );
   const [listTours, setListTours] = useState<Tour[]>([]);
-  const [, setPagination] = useState<Pagination | null>(null);
   const [noResult, setNoResult] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -109,17 +107,13 @@ const TourPage = () => {
         }
 
         const queryString = new URLSearchParams(params).toString();
-
         navigate(`/tour?${queryString}`);
 
         const res = await axios.get(`${baseURL}/public/tours/search`, {
           params: params,
         });
-        const { tours, pagination } = res.data;
+        const { tours } = res.data;
         setListTours(tours);
-        console.log("param -", params);
-        console.log("list tour -", listTours);
-        setPagination(pagination);
         setNoResult(false);
       } catch (err: any) {
         if (

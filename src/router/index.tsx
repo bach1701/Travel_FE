@@ -28,14 +28,10 @@ const AppRouter = () => {
           }
         />
         <Route path="/register" element={<RegisterPage />} />
-        <Route
-          path="/profile"
-          element={
-            <MainLayout>
-              <ProfilePage />
-            </MainLayout>
-          }
-        />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/booking-history" element={<ProfilePage />} />
+        <Route path="/profile/review-history" element={<ProfilePage />} />
+        <Route path="/profile/account-setting" element={<ProfilePage />} />
 
         <Route
           path="/"

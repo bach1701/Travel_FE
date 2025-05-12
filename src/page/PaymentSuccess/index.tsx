@@ -38,6 +38,10 @@ const PaymentSuccessPage = () => {
     navigate("/");
   };
 
+  const handleNavHistory = (): void => {
+    navigate("/profile/booking-history");
+  };
+
   const formatPrice = (price: number): string => {
     const formattedPrice = price.toLocaleString("vi-VN");
     return `${formattedPrice}`;
@@ -116,7 +120,10 @@ const PaymentSuccessPage = () => {
             <FaHome className="mr-2" />
             Back to Home
           </button>
-          <button className="bg-primary text-white rounded-lg flex items-center px-4 py-2">
+          <button
+            onClick={handleNavHistory}
+            className="bg-primary text-white rounded-lg flex items-center px-4 py-2"
+          >
             View History
             <FaList className="ml-2" />
           </button>

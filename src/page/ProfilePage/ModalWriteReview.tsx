@@ -7,7 +7,15 @@ import StarRatings from "react-star-ratings";
 import { ReviewResponse } from "../TourPage/ReviewType";
 import ModelNotification from "@/components/ModelNotification";
 
-const ModalWriteReview = ({ id }: { id: string }) => {
+const ModalWriteReview = ({
+  tour_id,
+  departure_id,
+  onReviewSubmitted,
+}: {
+  tour_id: string;
+  departure_id: string;
+  onReviewSubmitted: () => void;
+}) => {
   const { user } = useUserProfile();
   const [isSuccess, setIsSuccess] = useState<Boolean | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -15,8 +23,8 @@ const ModalWriteReview = ({ id }: { id: string }) => {
   const [, setReviewTour] = useState<ReviewResponse | null>(null);
 
   const [dataReviewRequest, setDataReviewRequest] = useState<ReviewRequest>({
-    tour_id: parseInt(id),
-    departure_id: "",
+    tour_id: parseInt(tour_id),
+    departure_id: departure_id,
     comment: "",
     ratings: {
       Foods: 0,
@@ -67,17 +75,17 @@ const ModalWriteReview = ({ id }: { id: string }) => {
     }
 
     try {
-      await axios.post(`${baseURL}/user/reviews/simple`, dataReviewRequest, {
+      await axios.post(`${baseURL}/user/reviews`, dataReviewRequest, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       console.log("Review data:", dataReviewRequest);
       alert("Review submitted successfully!");
       const resReviewTour = await axios.get(
-        `${baseURL}/public/reviews/tours/${id}`
+        `${baseURL}/public/reviews/tours/${tour_id}`
       );
       setReviewTour(resReviewTour.data);
       setDataReviewRequest({
-        tour_id: parseInt(id),
+        tour_id: parseInt(tour_id),
         comment: "",
         departure_id: "",
         ratings: {
@@ -91,20 +99,21 @@ const ModalWriteReview = ({ id }: { id: string }) => {
       });
       setSuccessMessage("Review submitted successfully!");
       setIsSuccess(true);
-    } catch (err) {
+      onReviewSubmitted();
+    } catch (err: any) {
       setIsSuccess(false);
-      setErrorMessage("Failed to submit review. Please try again later.");
+      setErrorMessage(err.response.data.message);
       console.error("Error submitting review:", err);
     }
   };
 
   return (
-    <div className="p-8 mt-12 rounded-lg border  border-primary bg-white">
+    <div className="px-4 py-2 rounded-lg border  border-primary bg-white">
       <h3 className="font-semibold">Write a review</h3>
-      <div className="mt-6 mb-10 grid grid-cols-3 gap-4 flex-1 justify-items-center">
+      <div className=" mb-10 grid grid-cols-3 gap-4 flex-1 justify-items-center">
         {ratingCategories.map((category) => (
-          <div key={category.key} className="flex items-center gap-4">
-            <p className="text-base min-w-[100px] text-right">
+          <div key={category.key} className="flex items-center gap-2">
+            <p className="text-base min-w-[50px] text-right">
               {category.label}
             </p>
             <StarRatings

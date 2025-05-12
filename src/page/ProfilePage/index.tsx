@@ -8,13 +8,27 @@ import { Profile } from "@/types/Profile";
 import { useEffect, useState } from "react";
 import ModelNotification from "@/components/ModelNotification";
 import BookingHistory from "./BookingHistory";
+import { useLocation, useNavigate } from "react-router-dom";
+import ReviewHistory from "./ReviewHistory";
+import AccountSetting from "./AccountSetting";
 
 const ProfilePage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [isSuccess, setIsSuccess] = useState<Boolean | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const [previewAvatar, setPreviewAvatar] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<string>("personal-information");
+  const [activeTab, setActiveTab] = useState<string>(
+    location.pathname === "/profile/booking-history"
+      ? "booking-history"
+      : location.pathname === "/profile/review-history"
+        ? "review-history"
+        : location.pathname === "/profile/account-setting"
+          ? "account-setting"
+          : "personal-information"
+  );
 
   const [profile, setProfile] = useState<Profile>({
     id: 0,
@@ -86,6 +100,20 @@ const ProfilePage = () => {
 
   const handleChangeActiveTab = (active: string): void => {
     setActiveTab(active);
+    let path = "/profile";
+    if (active === "booking-history") {
+      path += "/booking-history";
+    } else if (active === "review-history") {
+      path += "/review-history";
+    } else if (active === "account-setting") {
+      path += "/account-setting";
+    }
+    navigate(path);
+  };
+
+  const handleNavProfile = (): void => {
+    setActiveTab("personal-information");
+    navigate("/profile");
   };
 
   useEffect(() => {
@@ -178,7 +206,10 @@ const ProfilePage = () => {
           <div className="mb-6">
             <h2 className="text-xl font-bold flex items-center">
               {profile?.name}
-              <FaEdit className="text-primary ml-2 cursor-pointer" />
+              <FaEdit
+                onClick={handleNavProfile}
+                className="text-primary ml-2 cursor-pointer"
+              />
             </h2>
             <p className="flex items-center text-gray-500 mt-1">
               <FaLocationDot className="text-primary mr-1" />
@@ -240,6 +271,8 @@ const ProfilePage = () => {
             </div>
           )}
           {activeTab === "booking-history" && <BookingHistory />}
+          {activeTab === "review-history" && <ReviewHistory />}
+          {activeTab === "account-setting" && <AccountSetting />}
         </div>
       </div>
       {isSuccess === true && (
