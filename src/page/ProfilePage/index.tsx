@@ -7,15 +7,14 @@ import axios from "axios";
 import { Profile } from "@/types/Profile";
 import { useEffect, useState } from "react";
 import ModelNotification from "@/components/ModelNotification";
-import { UserBooking } from "@/types/UserProfile/UserBooking";
+import BookingHistory from "./BookingHistory";
 
 const ProfilePage = () => {
   const [isSuccess, setIsSuccess] = useState<Boolean | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const [previewAvatar, setPreviewAvatar] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<string>('personal-information');
-  const [historyBooking, setHistoryBooking] = useState<UserBooking[]>([]);
+  const [activeTab, setActiveTab] = useState<string>("personal-information");
 
   const [profile, setProfile] = useState<Profile>({
     id: 0,
@@ -87,7 +86,7 @@ const ProfilePage = () => {
 
   const handleChangeActiveTab = (active: string): void => {
     setActiveTab(active);
-  }
+  };
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -101,57 +100,81 @@ const ProfilePage = () => {
       }
     };
 
-    // const fetchUserReview = async () => {
-    //   try {
-    //     const resReview = await axios.get(`${baseURL}/`)
-    //   }
-    // }
-
-    const fetchUserBooking = async () => {
-      try {
-        const resBooking = await axios.get(`${baseURL}/user/bookings/confirmed`, { headers });
-        setHistoryBooking(resBooking.data.bookings);
-        console.log(resBooking.data.bookings);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
     fetchProfile();
-    fetchUserBooking();
   }, []);
 
   return (
-    <div className="mb-12 relative">
-      <PageBanner backgroundImage={bg} title="" breadcrumb={[]} />
-      <div className="absolute left-36 top-[40%] transform -translate-y-1/2 z-10">
-        <img
-          src={previewAvatar || profile?.avatar_url}
-          alt="Avatar"
-          className="w-72 h-72 rounded-full border-4 border-white object-cover shadow-md"
-        ></img>
-        <label className="absolute bottom-0 right-0 cursor-pointer">
-          <FaUserEdit className="text-primary rounded-full p-1" size="2em" />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="hidden"
-          />
-        </label>
-      </div>
-      <div className="px-36 mt-12 flex">
-        <div className="w-1/4 mt-32">
-          <div className="flex flex-col gap-4 text-sm font-medium">
-            <h5 onClick={() => handleChangeActiveTab('personal-information')} className={activeTab === 'personal-information' ? "text-primary border-l-4 border-primary pl-2" : "cursor-pointer"}>
-              Personal Information
-            </h5>
-            <h5 onClick={() => handleChangeActiveTab('booking-history')} className={activeTab === 'booking-history' ?  "text-primary border-l-4 border-primary pl-2" : 'cursor-pointer'}>Booking History (4)</h5>
-            <h5 onClick={() => handleChangeActiveTab('review-history')} className={activeTab === 'review-history' ?  "text-primary border-l-4 border-primary pl-2" : 'cursor-pointer'}>Review History (7)</h5>
-            <h5  onClick={() => handleChangeActiveTab('account-setting')} className={activeTab === 'account-setting' ?  "text-primary border-l-4 border-primary pl-2" : 'cursor-pointer'}>Account Setting</h5>
+    <div className="mb-12">
+      <div className="relative">
+        <PageBanner backgroundImage={bg} title="" breadcrumb={[]} />
+        <div className="absolute left-36 bottom-0 transform translate-y-1/2 z-10">
+          <div className="relative">
+            <img
+              src={previewAvatar || profile?.avatar_url}
+              alt="Avatar"
+              className="w-72 h-72 rounded-full border-4 border-white object-cover shadow-md"
+            />
+            <label className="absolute bottom-0 right-0 cursor-pointer">
+              <FaUserEdit
+                className="text-primary rounded-full p-1"
+                size="2em"
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </label>
           </div>
         </div>
-        <div className="w-3/4">
+      </div>
+      <div className="flex">
+        <div className="w-full md:w-1/4 mt-44 ml-auto mr-auto md:ml-36 md:mr-0 md:mt-40">
+          <div className="flex flex-col gap-4 text-sm font-medium">
+            <h5
+              onClick={() => handleChangeActiveTab("personal-information")}
+              className={
+                activeTab === "personal-information"
+                  ? "text-primary border-l-4 border-primary pl-2"
+                  : "cursor-pointer"
+              }
+            >
+              Personal Information
+            </h5>
+            <h5
+              onClick={() => handleChangeActiveTab("booking-history")}
+              className={
+                activeTab === "booking-history"
+                  ? "text-primary border-l-4 border-primary pl-2"
+                  : "cursor-pointer"
+              }
+            >
+              Booking History (4)
+            </h5>
+            <h5
+              onClick={() => handleChangeActiveTab("review-history")}
+              className={
+                activeTab === "review-history"
+                  ? "text-primary border-l-4 border-primary pl-2"
+                  : "cursor-pointer"
+              }
+            >
+              Review History (7)
+            </h5>
+            <h5
+              onClick={() => handleChangeActiveTab("account-setting")}
+              className={
+                activeTab === "account-setting"
+                  ? "text-primary border-l-4 border-primary pl-2"
+                  : "cursor-pointer"
+              }
+            >
+              Account Setting
+            </h5>
+          </div>
+        </div>
+        <div className="w-full md:w-3/4 mt-12 md:mt-12 ml-auto mr-auto md:ml-0 md:mr-36">
           <div className="mb-6">
             <h2 className="text-xl font-bold flex items-center">
               {profile?.name}
@@ -162,7 +185,7 @@ const ProfilePage = () => {
               {profile?.address}
             </p>
           </div>
-          {activeTab === 'personal-information' && (
+          {activeTab === "personal-information" && (
             <div className="border border-gray-300 rounded-md px-8 py-6 bg-white shadow-sm">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -216,82 +239,7 @@ const ProfilePage = () => {
               </div>
             </div>
           )}
-          {activeTab === 'booking-history' && (
-            <div className="bg-white rounded-xl border border-gray-300"> 
-              {historyBooking?.length > 0? (
-                 historyBooking.map((booking) => (
-                  <div key={booking?.booking_id} className="mb-6 border-b border-gray-200 pb-4 last:border-b-0">
-                    <h3 className="text-lg font-semibold text-gray-800">{booking.tour_title || 'No Title'}</h3>
-                    {/* <p className="text-sm text-gray-600 mt-1">
-                      Departure Date: {new Date(booking.departureDate).toLocaleDateString()}
-                    </p> */}
-                    <div className="flex justify-end mt-2">
-                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
-                        Xem hóa đơn
-                      </button>
-                      <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                        Viết review
-                      </button>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-500">Bạn chưa có lịch sử đặt phòng nào.</p>
-              )}
-            </div>
-          )}
-          {/* <div className="border border-gray-300 rounded-md px-8 py-6 bg-white shadow-sm">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="font-semibold my-2">Full Name</p>
-                <input
-                  value={profile?.name}
-                  onChange={(e) =>
-                    setProfile({ ...profile, name: e.target.value })
-                  }
-                  type="text"
-                  className="border border-gray-300 rounded-md w-full h-10 px-2"
-                />
-              </div>
-              <div>
-                <p className="font-semibold my-2">Phone</p>
-                <input
-                  value={profile?.phone_number}
-                  onChange={(e) =>
-                    setProfile({ ...profile, phone_number: e.target.value })
-                  }
-                  type="text"
-                  className="border border-gray-300 rounded-md w-full h-10 px-2"
-                />
-              </div>
-            </div>
-            <p className="font-semibold my-2">Email</p>
-            <input
-              value={profile?.email}
-              onChange={(e) =>
-                setProfile({ ...profile, email: e.target.value })
-              }
-              type="email"
-              className="border border-gray-300 rounded-md w-full h-10 px-2"
-            />
-            <p className="font-semibold my-2">Address</p>
-            <input
-              value={profile?.address}
-              onChange={(e) =>
-                setProfile({ ...profile, address: e.target.value })
-              }
-              type="text"
-              className="border border-gray-300 rounded-md w-full h-10 px-2"
-            />
-            <div className="flex justify-center">
-              <button
-                onClick={handleEditProfile}
-                className="bg-primary text-white p-2 uppercase rounded-lg mt-4 items-center font-semibold justify-center"
-              >
-                Save
-              </button>
-            </div>
-          </div> */}
+          {activeTab === "booking-history" && <BookingHistory />}
         </div>
       </div>
       {isSuccess === true && (

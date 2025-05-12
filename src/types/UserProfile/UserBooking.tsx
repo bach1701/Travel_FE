@@ -3,8 +3,8 @@ export interface UserBooking {
   departure_id: number;
   user_id: number;
   num_adults: number;
-  num_children_120_140?: number; // Dấu '?' cho biết thuộc tính này có thể không có
-  num_children_100_120?: number;
+  num_children_120_140: number;
+  num_children_100_120: number;
   total_price: string;
   booking_status: string;
   special_requests?: string;
@@ -18,12 +18,14 @@ export interface UserBooking {
     address: string;
     fullname: string;
   } | null;
-  passengers?: {
-    gender: string;
-    birthday: string;
-    fullname: string;
-    ticket_type: string;
-  }[] | null;
+  passengers?:
+    | {
+        gender: string;
+        birthday: string;
+        fullname: string;
+        ticket_type: string;
+      }[]
+    | null;
   order_notes?: {
     smoking?: boolean;
     disabled?: boolean;
