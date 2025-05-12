@@ -55,18 +55,23 @@ const Destination = () => {
             <img src={destination.img}></img>
             <h3 className="px-8 pt-4 pb-4 font-bold">{destination.loca}</h3>
             <p className="text-left px-8 pb-4">{destination.des_eng}</p>
-            <div className="flex items-center justify-start px-8 pb-4">
+            <div className="flex items-center px-8 pb-4">
               <p
                 onClick={() => handleSearchRegion(destination.region)}
-                className="text-primary uppercase font-bold cursor-pointer"
-                style={{ fontSize: "14px", marginRight: "10px" }}
+                className="text-primary uppercase font-bold cursor-pointer mr-2"
+                style={{
+                  fontSize: "20px",
+                }}
               >
                 See more
               </p>
               <FaArrowRight
                 onClick={() => handleSearchRegion(1)}
                 className="cursor-pointer"
-                style={{ color: "#FF6A00", fontSize: "20px" }}
+                style={{
+                  color: "#FF6A00",
+                  fontSize: "20px",
+                }}
               />
             </div>
           </div>

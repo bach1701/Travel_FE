@@ -19,6 +19,8 @@ import { destinationRegionMap } from "@/utils/locationRegions";
 import { baseURL } from "@/config/api";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+import { Pagination } from "antd";
+import "antd/dist/reset.css";
 
 const TourPage = () => {
   const navigate = useNavigate();
@@ -48,8 +50,12 @@ const TourPage = () => {
     searchParamsDestination || ""
   );
   const [listTours, setListTours] = useState<Tour[]>([]);
-  const [noResult, setNoResult] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [noResult, setNoResult] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(6);
+  const [totalItem, setTotalItem] = useState<number>(0);
+  const [totalPage, setTotalPage] = useState<number>(0);
 
   const dispatch = useDispatch<AppDispatch>();
   const { departureLocations, destinations } = useSelector(
@@ -80,6 +86,8 @@ const TourPage = () => {
           availability: true,
           min_price: priceRange[0],
           max_price: priceRange[1],
+          page: currentPage,
+          limit: pageSize,
         };
 
         if (region !== 0) {
@@ -115,6 +123,8 @@ const TourPage = () => {
         const { tours } = res.data;
         setListTours(tours);
         setNoResult(false);
+        setTotalItem(res.data.pagination.totalItems);
+        setTotalPage(res.data.pagination.totalPages);
       } catch (err: any) {
         if (
           axios.isAxiosError(err) &&
@@ -140,7 +150,18 @@ const TourPage = () => {
     people,
     departureDate,
     navigate,
+    currentPage,
+    pageSize,
   ]);
+
+  const handlePageChange = (page: number): void => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (value: number): void => {
+    setCurrentPage(1);
+    setPageSize(value);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -408,6 +429,28 @@ const TourPage = () => {
                 ))}
               </div>
             )}
+            <div className="mt-6 flex justify-center">
+              {totalPage > 1 && (
+                <Pagination
+                  current={currentPage}
+                  total={totalItem}
+                  pageSize={pageSize}
+                  onChange={handlePageChange}
+                  pageSizeOptions={["6", "9", "12"]}
+                  showSizeChanger
+                  onShowSizeChange={(_item, size) => handlePageSizeChange(size)}
+                  itemRender={(_page, type, originalElement) => {
+                    if (type === "prev") {
+                      return <a>Previous</a>;
+                    }
+                    if (type === "next") {
+                      return <a>Next</a>;
+                    }
+                    return originalElement;
+                  }}
+                />
+              )}
+            </div>
           </div>
         )}
       </div>

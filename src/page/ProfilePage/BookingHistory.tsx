@@ -98,11 +98,11 @@ const BookingHistory = () => {
       "relative mx-auto bg-white p-6 rounded-lg shadow-lg outline-none w-11/12 max-w-3xl max-h-[90vh] overflow-auto",
   };
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = (page: number): void => {
     setCurrentPage(page);
   };
 
-  const handlePageSizeChange = (value: number) => {
+  const handlePageSizeChange = (value: number): void => {
     setPageSize(value);
     setCurrentPage(1);
   };
