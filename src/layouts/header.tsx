@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/image/header/logo-header.jpg";
 import { useUserProfile } from "../hooks/useUserProfile";
+import avatarDefault from "../assets/image/avatar/avatar_default.avif";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -103,7 +104,7 @@ const Header: React.FC = () => {
             onClick={() => setDropdownOpen(!dropdownOpen)}
           >
             <img
-              src={user.avatar_url}
+              src={user.avatar_url || avatarDefault}
               alt="User Avatar"
               className="w-12 h-12 rounded-full object-cover"
             />
