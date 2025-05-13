@@ -198,7 +198,7 @@ const BookingHistory = () => {
             )}
           </div>
           <div className="mt-6 flex justify-center">
-            {totalPage > 1 && (
+            {totalPage >= 1 && (
               <Pagination
                 current={currentPage}
                 total={totalItem}

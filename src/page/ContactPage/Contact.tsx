@@ -1,5 +1,5 @@
 import { FaMailBulk, FaPaperPlane, FaPhone } from "react-icons/fa";
-import { FaLocationPin } from "react-icons/fa6";
+import { FaLocationDot } from "react-icons/fa6";
 import plane from "../../assets/image/about/plane.svg";
 
 const Contact = () => {
@@ -10,15 +10,15 @@ const Contact = () => {
       <div className="flex w-full mt-12">
         <div className="w-2/5 flex flex-col pr-16">
           <img className="rounded-2xl mb-4" src={plane}></img>
-          <p className="flex items-center text-[18px] mb-3">
+          <p className="flex items-center text-[18px] font-semibold mb-3">
             <FaMailBulk className="text-primary mr-3 text-[18px]"></FaMailBulk>
             travelwithb&p@gmail.com
           </p>
-          <p className="flex items-center text-[18px] mb-3">
-            <FaLocationPin className="text-primary mr-3 text-[18px]"></FaLocationPin>
+          <p className="flex items-center font-semibold text-[18px] mb-3">
+            <FaLocationDot className="text-primary mr-3 text-[18px]"></FaLocationDot>
             54 Nguyễn Lương Bằng, Đà Nẵng
           </p>
-          <p className="flex items-center text-[18px] mb-3">
+          <p className="flex items-center text-[18px] font-semibold mb-3">
             <FaPhone className="text-primary mr-3 text-[18px]"></FaPhone> 1900
             10099
           </p>
