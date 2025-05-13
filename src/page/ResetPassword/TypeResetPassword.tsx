@@ -13,13 +13,6 @@ const TypeResetPassword = () => {
   const navigate = useNavigate();
   const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
   const [messageError, setMessageError] = useState<string | null>(null);
-  const handleNavSignUp = (): void => {
-    navigate("/register");
-  };
-
-  const handleNavLogin = (): void => {
-    navigate("/login");
-  };
 
   const handleCloseNotification = (): void => {
     setIsSuccess(null);
