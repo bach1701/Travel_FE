@@ -37,13 +37,17 @@ const LoginPage = () => {
     }
   };
 
-  const handleSignUp = (): void => {
+  const handleNavSignUp = (): void => {
     naviagate("/register");
   };
 
   const handleCloseNotification = (): void => {
     setIsSuccess(null);
     setMessageError(null);
+  };
+
+  const handleNavForgotPassword = (): void => {
+    naviagate("/reset-password");
   };
 
   return (
@@ -59,7 +63,7 @@ const LoginPage = () => {
               Don't have account?{" "}
             </p>
             <p
-              onClick={handleSignUp}
+              onClick={handleNavSignUp}
               className="font-inter ml-1 underline cursor-pointer"
             >
               {" "}
@@ -102,7 +106,11 @@ const LoginPage = () => {
                 />
                 Remember me
               </label>
-              <button type="button" className="hover:underline text-blue-600">
+              <button
+                onClick={handleNavForgotPassword}
+                type="button"
+                className="hover:underline text-blue-600"
+              >
                 Forgot Password?
               </button>
             </div>

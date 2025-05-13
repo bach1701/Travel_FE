@@ -13,6 +13,8 @@ import PaymentSuccessPage from "@/page/PaymentSuccess";
 import PaymentFailedPage from "@/page/PaymentFailedPage";
 import ProfilePage from "@/page/ProfilePage";
 import DestinationPage from "@/page/Destination";
+import ResetPassword from "@/page/ResetPassword";
+import TypeResetPassword from "@/page/ResetPassword/TypeResetPassword";
 
 const AppRouter = () => {
   return (
@@ -28,6 +30,11 @@ const AppRouter = () => {
           }
         />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route
+          path="/reset-password/:tokenReset"
+          element={<TypeResetPassword />}
+        />
         <Route
           path="/profile"
           element={

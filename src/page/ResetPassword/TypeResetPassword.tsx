@@ -1,12 +1,15 @@
 import { useState } from "react";
 import backgroundImage from "../../assets/image/auth/background-login.jpeg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ModelNotification from "@/components/ModelNotification";
 import axios from "axios";
 import { baseURL } from "@/config/api";
 
-const ResetPassword = () => {
-  const [email, setEmail] = useState<string>("");
+const TypeResetPassword = () => {
+  const { tokenReset } = useParams<{ tokenReset: string }>();
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+
   const navigate = useNavigate();
   const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
   const [messageError, setMessageError] = useState<string | null>(null);
@@ -25,11 +28,19 @@ const ResetPassword = () => {
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      setIsSuccess(false);
+      setMessageError("Mật khẩu không khớp, vui lòng kiểm tra lại.");
+      return;
+    }
     try {
       const resResetPassword = axios.post(
-        `${baseURL}/user/auth/reset-password`,
-        { email }
+        `${baseURL}/user/auth/reset-password/${tokenReset}`,
+        { password }
       );
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
       console.log(resResetPassword);
       setIsSuccess(true);
     } catch (err: any) {
@@ -48,41 +59,32 @@ const ResetPassword = () => {
           <h2 className="font-bold mt-2 mb-8 text-primary">
             Reset your password
           </h2>
-          <div className="flex items-center mb-6 font-inter">
-            <p className="font-inter text-gray-400 to-blue-950">
-              Don't have account?
-            </p>
-            <p
-              onClick={handleNavSignUp}
-              className="font-inter ml-1 underline cursor-pointer"
-            >
-              {" "}
-              Create now
-            </p>
-          </div>
+          <div className="flex items-center mb-6 font-inter"></div>
           <form onSubmit={handleResetPassword}>
             <div className="mb-4">
               <label htmlFor="email" className="block text-gray-700 mb-1">
-                Email
+                Password
               </label>
               <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                id="email"
-                placeholder="example@gmail.com"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                placeholder="********"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-400"
               />
             </div>
 
-            <div className="flex justify-between items-center text-sm text-gray-600 mb-8">
-              <button
-                onClick={handleNavLogin}
-                type="button"
-                className="hover:underline text-blue-600"
-              >
-                Did you remember the password?
-              </button>
+            <div className="mb-4">
+              <label htmlFor="email" className="block text-gray-700 mb-1">
+                Confirm Password
+              </label>
+              <input
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                type="password"
+                placeholder="********"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-400"
+              />
             </div>
 
             <button
@@ -90,7 +92,7 @@ const ResetPassword = () => {
               className="mb-6 w-full py-2 text-white rounded-lg hover:text-gray-200 transition duration-300"
               style={{ background: "#FF6A00" }}
             >
-              Send verify your Email
+              Reset password
             </button>
           </form>
         </div>
@@ -98,7 +100,7 @@ const ResetPassword = () => {
           <ModelNotification
             type="success"
             message="Thành công!"
-            description={"Vui lòng xác thực ở email của bạn!"}
+            description={"Vui lòng đăng nhập lại!"}
             onClose={handleCloseNotification}
           />
         )}
@@ -116,4 +118,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default TypeResetPassword;
