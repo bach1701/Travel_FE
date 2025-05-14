@@ -176,13 +176,21 @@ const BookingHistory = () => {
                           Xem hóa đơn
                         </button>
                         <button
+                          disabled={booking.booking_date < booking.start_date}
                           onClick={() =>
                             handleWriteReview(
                               booking.tour_id,
                               booking.departure_id
                             )
                           }
-                          className="bg-blue-500 mt-2 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-sm"
+                          className={`
+                            mt-2 font-bold py-2 px-4 rounded text-sm
+                            ${
+                              booking.booking_date < booking.start_date
+                                ? "bg-gray-300 text-gray-500 cursor-not-allowed opacity-50"
+                                : "bg-blue-500 hover:bg-blue-600 text-white"
+                            }
+                          `}
                         >
                           Viết đánh giá
                         </button>
@@ -241,6 +249,7 @@ const BookingHistory = () => {
               <ModalWriteReview
                 tour_id={bookingReviewSelected[0].toString()}
                 departure_id={bookingReviewSelected[1].toString()}
+                review_id="none"
                 onReviewSubmitted={handleCloseModalReview}
               />
             )}

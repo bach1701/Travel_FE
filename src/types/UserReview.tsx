@@ -24,4 +24,5 @@ export interface Rating {
 export interface TourDetails {
   tour_id: number;
   image_url?: string;
+  seller_name: string;
 }
