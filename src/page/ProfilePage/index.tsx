@@ -43,6 +43,8 @@ const ProfilePage = () => {
     phone_number: "",
     address: "",
     status: "",
+    total_bookings: 0,
+    total_reviews: 0,
   });
 
   const headers = {
@@ -194,7 +196,7 @@ const ProfilePage = () => {
                       : "cursor-pointer"
                   }
                 >
-                  Booking History (4)
+                  Booking History ({profile.total_bookings})
                 </h5>
                 <h5
                   onClick={() => handleChangeActiveTab("review-history")}
@@ -204,7 +206,7 @@ const ProfilePage = () => {
                       : "cursor-pointer"
                   }
                 >
-                  Review History (7)
+                  Review History ({profile.total_reviews})
                 </h5>
                 <h5
                   onClick={() => handleChangeActiveTab("account-setting")}

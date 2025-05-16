@@ -39,5 +39,5 @@ export interface UserBooking {
   tour_id: number;
   tour_title: string;
   departure_location: string;
-  // Có thể có thêm các thuộc tính khác
+  isReview: boolean;
 }

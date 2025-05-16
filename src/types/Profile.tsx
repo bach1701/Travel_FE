@@ -7,4 +7,6 @@ export interface Profile {
   phone_number: string;
   address: string;
   status: string;
+  total_bookings: number;
+  total_reviews: number;
 }

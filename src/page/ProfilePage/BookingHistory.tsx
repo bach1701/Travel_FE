@@ -152,9 +152,9 @@ const BookingHistory = () => {
                       </td>
                       <td className="px-4 py-2">
                         17/01/2003
-                        {/* {booking.departure_date
-                          ? format(new Date(booking.departure_date), 'dd/MM/yyyy', { locale: vi })
-                          : "Không có"} */}
+                        {booking.start_date
+                          ? formatDate(booking.start_date)
+                          : "Không có"}
                       </td>
                       <td className="px-4 py-2">
                         {handleSumOfTourists(
@@ -186,7 +186,8 @@ const BookingHistory = () => {
                           className={`
                             mt-2 font-bold py-2 px-4 rounded text-sm
                             ${
-                              booking.booking_date < booking.start_date
+                              booking.booking_date < booking.start_date ||
+                              booking.isReview == true
                                 ? "bg-gray-300 text-gray-500 cursor-not-allowed opacity-50"
                                 : "bg-blue-500 hover:bg-blue-600 text-white"
                             }

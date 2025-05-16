@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Tour } from "@/types/Tour";
-import { FaClock, FaPlaneDeparture } from "react-icons/fa";
+import { FaClock, FaHotel, FaPlaneDeparture } from "react-icons/fa";
 import { Card, CardContent } from "./ui/CardItem";
 import { Badge } from "./ui/BadgeItem";
 import { useNavigate } from "react-router-dom";
@@ -39,6 +39,12 @@ const TourCardItem: React.FC<TourCardProps> = ({ tour }) => {
           <h2 className="font-semibold text-base mb-1.5 mt-3 line-clamp-2 tour-title">
             {tour.title}
           </h2>
+        </div>
+        <div className="flex items-center gap-2 my-3">
+          <FaHotel className="flex-shrink-0" style={{ color: "#FF6A00" }} />
+          <span className="text-sm text-gray-600 line-clamp-1">
+            By: {tour.seller_name}
+          </span>
         </div>
         <div className="flex items-center gap-2 my-3">
           <FaClock className="flex-shrink-0" style={{ color: "#FF6A00" }} />
