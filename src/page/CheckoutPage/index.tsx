@@ -306,10 +306,6 @@ const CheckoutPage = () => {
     return `${formattedPrice}`;
   };
 
-  // const handleCofirmCheckout = (): void => {
-
-  // }
-
   const handleSelectPromotion = (promotion: Promotion) => {
     setSuccessMessage("Áp mã giảm giá thanh công!");
     setIsSuccess(true);
