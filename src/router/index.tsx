@@ -15,7 +15,6 @@ import ProfilePage from "@/page/ProfilePage";
 import DestinationPage from "@/page/Destination";
 import ResetPassword from "@/page/ResetPassword";
 import TypeResetPassword from "@/page/ResetPassword/TypeResetPassword";
-import Chatbot from "@/components/Chatbox";
 
 const AppRouter = () => {
   return (
@@ -141,7 +140,6 @@ const AppRouter = () => {
           }
         />
       </Routes>
-      <Chatbot />
     </BrowserRouter>
   );
 };
