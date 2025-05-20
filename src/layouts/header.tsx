@@ -31,6 +31,8 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("AccessToken");
+    sessionStorage.removeItem("chatbot_session_id");
+    sessionStorage.removeItem("chatbot_greeted");
     navigate("/login");
   };
 

@@ -15,9 +15,8 @@ const Chatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState("");
-  const [sessionId, setSessionId] = useState<string | null>(
-    localStorage.getItem("chatbot_session_id")
-  );
+  const [sessionId, setSessionId] = useState<string | null>(null);
+
   const chatMessagesRef = useRef<HTMLDivElement>(null);
   const token = localStorage.getItem("AccessToken");
 
@@ -29,7 +28,7 @@ const Chatbot: React.FC = () => {
 
   const handleToggleChat = () => {
     setIsOpen(!isOpen);
-    if (!isOpen && !localStorage.getItem("chatbot_greeted")) {
+    if (!isOpen && !sessionStorage.getItem("chatbot_greeted")) {
       const timestamp = moment().format("HH:mm");
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -39,7 +38,7 @@ const Chatbot: React.FC = () => {
           timestamp,
         },
       ]);
-      localStorage.setItem("chatbot_greeted", "true");
+      sessionStorage.setItem("chatbot_greeted", "true");
     }
   };
 
@@ -96,12 +95,10 @@ const Chatbot: React.FC = () => {
 
         if (data.session_id && !sessionId) {
           setSessionId(data.session_id);
-          localStorage.setItem("chatbot_session_id", data.session_id);
-          console.log("Session ID saved:", data.session_id);
+          sessionStorage.setItem("chatbot_session_id", data.session_id);
         } else if (data.session_id && sessionId !== data.session_id) {
           setSessionId(data.session_id);
-          localStorage.setItem("chatbot_session_id", data.session_id);
-          console.warn("Session ID updated:", data.session_id);
+          sessionStorage.setItem("chatbot_session_id", data.session_id);
         }
       } catch (error) {
         console.error("Error sending message:", error);

@@ -1,6 +1,6 @@
 import TourCardItem from "@/components/TourCardItem";
 import { baseURL } from "@/config/api";
-import { Pagination, TourResponse } from "@/types/Pagination";
+import { TourResponse } from "@/types/Pagination";
 import { Tour } from "@/types/Tour";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -8,7 +8,6 @@ import { ClipLoader } from "react-spinners";
 
 const PopularTour = () => {
   const [tours, setTours] = useState<Tour[]>([]);
-  const [, setPagination] = useState<Pagination | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,10 +16,8 @@ const PopularTour = () => {
         const response = await axios.get<TourResponse>(
           `${baseURL}/public/tours/search`
         );
-        const { tours, pagination } = response.data;
+        const { tours } = response.data;
         setTours(tours.slice(0, 3));
-        setPagination(pagination);
-        console.log(pagination);
       } catch (err) {
         console.error("Lỗi khi lấy danh sách tour:", err);
       } finally {
