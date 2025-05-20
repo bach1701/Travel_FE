@@ -21,6 +21,7 @@ import TourCardItem from "@/components/TourCardItem";
 import BookNowButton from "@/components/ui/ButtonPrimary";
 import { ClipLoader } from "react-spinners";
 import Review from "./Review";
+import { isTokenValid } from "@/utils/jwtDecodeExpTime";
 
 const DetailTour = () => {
   const { id } = useParams<{ id: string }>();
@@ -86,9 +87,19 @@ const DetailTour = () => {
   };
 
   useEffect(() => {
+    const accessToken = localStorage.getItem("AccessToken");
     const fetchDetailTour = async () => {
+      let resDetailTour;
       try {
-        const resDetailTour = await axios.get(`${baseURL}/public/tours/${id}`);
+        if (accessToken && isTokenValid(accessToken)) {
+          resDetailTour = await axios.get(`${baseURL}/public/tours/${id}`, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          });
+          console.log("1-", resDetailTour);
+        } else {
+          resDetailTour = await axios.get(`${baseURL}/public/tours/${id}`);
+          console.log("2-", resDetailTour);
+        }
         setTour(resDetailTour.data);
         setItinerary(resDetailTour.data.itinerary);
         setImage(resDetailTour.data.images);
