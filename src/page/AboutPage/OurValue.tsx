@@ -1,6 +1,6 @@
 import { FaGlobe, FaLeaf, FaSave, FaUser } from "react-icons/fa";
 import bg from "../../assets/image/about/bg-ourvalue.jpg";
-import methodpay from '../../assets/image/about/methodpay.svg'
+import methodpay from "../../assets/image/about/methodpay.svg";
 const OurValue = () => {
   const ContentOurValue = [
     {
@@ -22,14 +22,16 @@ const OurValue = () => {
         "We're committed to minimizing our environmental impact and supporting conservation efforts worldwide.",
     },
     {
-      icon: <FaGlobe className="bg-white p-1 rounded-lg text-primary"></FaGlobe>,
+      icon: (
+        <FaGlobe className="bg-white p-1 rounded-lg text-primary"></FaGlobe>
+      ),
       title: "Global Perspective",
       description:
         "We believe travel builds bridges between cultures and fosters a more connected, understanding world.",
     },
   ];
   return (
-    <div>
+    <div id="our-values-section">
       <div className="grid grid-cols-2 gap-10 mt-24 px-24">
         <div>
           <h3 className="font-bold text-[36px]">Our Values</h3>
@@ -42,9 +44,12 @@ const OurValue = () => {
             {ContentOurValue.map((item, index) => (
               <div key={index} className="mt-6">
                 <div className="flex items-center text-[30px]">
-                  {item.icon} <p className="font-semibold ml-2">{item.title}</p>
+                  {item.icon}{" "}
+                  <p className="font-semibold mb-0 ml-2">{item.title}</p>
                 </div>
-                <p className="text-gray-500 mt-2 text-[20px]">{item.description}</p>
+                <p className="text-gray-500 mt-2 text-[20px]">
+                  {item.description}
+                </p>
               </div>
             ))}
           </div>
@@ -56,7 +61,10 @@ const OurValue = () => {
           }}
         ></div>
       </div>
-      <div className="bg-center bg-no-repeat" style={{ backgroundImage: `url(${methodpay})`, height: '350px'}}></div>
+      <div
+        className="bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${methodpay})`, height: "350px" }}
+      ></div>
     </div>
   );
 };

@@ -4,7 +4,12 @@ import banner1 from "../../assets/image/home/banner.jpeg";
 import banner2 from "../../assets/image/home/pq2.jpg";
 import banner3 from "../../assets/image/home/hcm.jpg";
 import styled from "styled-components";
-import { FaMapMarkerAlt, FaCalendarAlt, FaSearch } from "react-icons/fa";
+import {
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaSearch,
+  FaChevronDown,
+} from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchLocations } from "../../redux/locationSlice";
@@ -50,6 +55,33 @@ const SearchButton = styled.button`
   }
 `;
 
+const SelectWrapper = styled.div`
+  position: relative;
+  width: 100%;
+
+  select {
+    width: 100%;
+    padding: 14px 14px 14px 45px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+    color: #666;
+    appearance: none; /* Loại bỏ mũi tên mặc định */
+    cursor: pointer;
+  }
+
+  .select-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ff6a00;
+    pointer-events: none; /* Đảm bảo click xuyên qua icon */
+    z-index: 1;
+  }
+`;
+
 const Slideshow = () => {
   const navigate = useNavigate();
 
@@ -81,7 +113,7 @@ const Slideshow = () => {
   return (
     <div style={{ position: "relative" }}>
       <div className="slide-container">
-        <Fade>
+        <Fade indicators={false} arrows={false}>
           {fadeImages.map((fadeImage, index) => (
             <div
               key={index}
@@ -149,7 +181,7 @@ const Slideshow = () => {
         }}
       >
         <div style={{ flex: 1, position: "relative" }}>
-          <div style={{ position: "relative" }}>
+          <SelectWrapper>
             <FaMapMarkerAlt
               style={{
                 position: "absolute",
@@ -162,15 +194,6 @@ const Slideshow = () => {
             <select
               value={selectedDeparture}
               onChange={(e) => setSelectedDeparture(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "14px 14px 14px 45px",
-                border: "1px solid #000",
-                borderRadius: "10px",
-                fontSize: "16px",
-                outline: "none",
-                color: "#666",
-              }}
             >
               <option value="">Chọn điểm khởi hành</option>
               {departureLocations.map((loc) => (
@@ -179,11 +202,14 @@ const Slideshow = () => {
                 </option>
               ))}
             </select>
-          </div>
+            <div className="select-icon">
+              <FaChevronDown />
+            </div>
+          </SelectWrapper>
         </div>
 
         <div style={{ flex: 1, position: "relative" }}>
-          <div style={{ position: "relative" }}>
+          <SelectWrapper>
             <FaMapMarkerAlt
               style={{
                 position: "absolute",
@@ -196,15 +222,6 @@ const Slideshow = () => {
             <select
               value={selectedDestination}
               onChange={(e) => setSelectedDestination(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "14px 14px 14px 45px",
-                border: "1px solid #000",
-                borderRadius: "10px",
-                fontSize: "16px",
-                outline: "none",
-                color: "#666",
-              }}
             >
               <option value="">Chọn điểm đến</option>
               {destinations.map((dest) => (
@@ -213,7 +230,10 @@ const Slideshow = () => {
                 </option>
               ))}
             </select>
-          </div>
+            <div className="select-icon">
+              <FaChevronDown />
+            </div>
+          </SelectWrapper>
         </div>
 
         <div style={{ flex: 1, position: "relative" }}>
@@ -247,34 +267,8 @@ const Slideshow = () => {
           </div>
         </div>
 
-        {/* <div style={{ flex: 1, position: 'relative' }}>
-          <div style={{ position: 'relative' }}>
-            <FaCalendarAlt style={{
-              position: 'absolute',
-              left: '15px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: '#FF6A00'
-            }} />
-            <input 
-              type="text" 
-              placeholder="Number of days"
-              onFocus={(e) => (e.target.type = 'number')}
-              onBlur={(e) => (e.target.type = 'text')}
-              style={{
-                width: '100%',
-                padding: '14px 14px 14px 45px',
-                border: '1px solid #000',
-                borderRadius: '10px',
-                fontSize: '16px',
-                outline: 'none'
-              }}
-            />
-          </div>
-        </div> */}
-
         <div style={{ flex: 1, position: "relative" }}>
-          <div style={{ position: "relative" }}>
+          <SelectWrapper>
             <FaCalendarAlt
               style={{
                 position: "absolute",
@@ -287,15 +281,6 @@ const Slideshow = () => {
             <select
               value={selectedDuration}
               onChange={(e) => setSelectedDuration(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "14px 14px 14px 45px",
-                border: "1px solid #000",
-                borderRadius: "10px",
-                fontSize: "16px",
-                outline: "none",
-                color: "#666",
-              }}
             >
               <option value="">Chọn số ngày</option>
               <option value="1-3 ngày">1-3 ngày</option>
@@ -303,7 +288,10 @@ const Slideshow = () => {
               <option value="5-7 ngày">5-7 ngày</option>
               <option value="7+ ngày">7+ ngày</option>
             </select>
-          </div>
+            <div className="select-icon">
+              <FaChevronDown />
+            </div>
+          </SelectWrapper>
         </div>
 
         <div style={{ flex: 0.1 }}>

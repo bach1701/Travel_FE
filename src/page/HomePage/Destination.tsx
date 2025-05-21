@@ -16,7 +16,7 @@ const Destination = () => {
         "The North is famous for its majestic mountains and natural scenery. An ideal journey for those who love exploring nature and nostalgia.",
     },
     {
-      loca: "The central of Vietnam",
+      loca: "Central of Vietnam",
       region: 2,
       img: central,
       des_vn:
@@ -54,19 +54,21 @@ const Destination = () => {
           <div className="flex-1 bg-white p-3" key={index}>
             <img src={destination.img}></img>
             <h3 className="px-8 pt-4 pb-4 font-bold">{destination.loca}</h3>
-            <p className="text-left px-8 pb-4">{destination.des_eng}</p>
+            <p className="text-left px-8 pb-4 line-clamp-4">
+              {destination.des_eng}
+            </p>
             <div className="flex items-center px-8 pb-4">
               <p
                 onClick={() => handleSearchRegion(destination.region)}
-                className="text-primary uppercase font-bold cursor-pointer mr-2"
+                className="text-primary uppercase font-bold cursor-pointer mb-0 mr-4"
                 style={{
-                  fontSize: "20px",
+                  fontSize: "24px",
                 }}
               >
                 See more
               </p>
               <FaArrowRight
-                onClick={() => handleSearchRegion(1)}
+                onClick={() => handleSearchRegion(destination.region)}
                 className="cursor-pointer"
                 style={{
                   color: "#FF6A00",

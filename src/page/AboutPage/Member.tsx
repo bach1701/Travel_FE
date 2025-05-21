@@ -4,7 +4,7 @@ import designer from "../../assets/image/about/member/designer.svg";
 
 const Member = () => {
   return (
-    <div className="text-center">
+    <div className="text-center" id="get-to-know-us">
       <h2 className="font-semibold text-[48px] mt-24">
         Our Expert Team Member
       </h2>

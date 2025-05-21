@@ -220,7 +220,7 @@ const ProfilePage = () => {
                 </h5>
               </div>
             </div>
-            <div className="w-full md:w-3/4 mt-12 md:mt-12 ml-auto mr-auto md:ml-0 md:mr-36">
+            <div className="w-full md:w-3/4 mt-12 md:mt-12 ml-auto mr-auto md:ml-8 md:mr-36">
               <div className="mb-6">
                 <h2 className="text-xl font-bold flex items-center">
                   {profile?.name}

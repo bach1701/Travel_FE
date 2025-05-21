@@ -6,6 +6,20 @@ import Member from "./Member";
 import OurValue from "./OurValue";
 
 const AboutPage = () => {
+  const scrollToMemberSection = () => {
+    const memberSection = document.getElementById("get-to-know-us");
+    if (memberSection) {
+      memberSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const scrollToOurValueSection = () => {
+    const ourValueSection = document.getElementById("our-values-section");
+    if (ourValueSection) {
+      ourValueSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <div>
       <PageBanner
@@ -16,7 +30,10 @@ const AboutPage = () => {
           { label: "About", href: "/about" },
         ]}
       ></PageBanner>
-      <OurStory />
+      <OurStory
+        scrollToMember={scrollToMemberSection}
+        scrollToValues={scrollToOurValueSection}
+      />
       <Cooparature />
       <Member />
       <OurValue />

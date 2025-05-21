@@ -126,13 +126,13 @@ const BookingHistory = () => {
               <table className="w-full table-auto rounded-xl">
                 <thead className="bg-gray-100 rounded-xl">
                   <tr>
-                    <th className="px-4 py-2 text-left">Booking ID</th>
-                    <th className="px-4 py-2 text-left">Tiêu Đề Tour</th>
-                    <th className="px-4 py-2 text-left">Ngày Đặt</th>
-                    <th className="px-4 py-2 text-left">Khởi Hành</th>
-                    <th className="px-4 py-2 text-left">Số Khách</th>
-                    <th className="px-4 py-2 text-left">Giá</th>
-                    <th className="px-4 py-2 text-left">Hành Động</th>
+                    <th className="px-4 py-2 text-center "> ID</th>
+                    <th className="px-4 py-2 text-center">Tiêu Đề Tour</th>
+                    <th className="px-4 py-2 text-center">Ngày Đặt</th>
+                    <th className="px-4 py-2 text-center">Khởi Hành</th>
+                    <th className="px-4 py-2 text-center">Số Khách</th>
+                    <th className="px-4 py-2 text-center">Giá</th>
+                    <th className="px-4 py-2 text-center">Hành Động</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -141,32 +141,31 @@ const BookingHistory = () => {
                       key={booking?.booking_id}
                       className="border-b border-gray-200"
                     >
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-2 ">
                         #B&P_{booking.booking_id || "Không có tiêu đề"}
                       </td>
                       <td className="px-4 py-2">
                         {booking.tour_title || "Không có tiêu đề"}
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-2 text-center">
                         {formatDate(booking.booking_date)}
                       </td>
-                      <td className="px-4 py-2">
-                        17/01/2003
+                      <td className="px-4 py-2 text-center">
                         {booking.start_date
                           ? formatDate(booking.start_date)
                           : "Không có"}
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-2 text-center">
                         {handleSumOfTourists(
                           booking.num_adults,
                           booking.num_children_120_140,
                           booking.num_children_100_120
                         )}
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-2 text-center">
                         {formatPrice(Number(booking.total_price))}
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-2 text-center">
                         <button
                           onClick={() =>
                             handleNavigateToInvoice(booking.booking_id)

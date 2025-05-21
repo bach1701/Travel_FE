@@ -1,12 +1,15 @@
 import building from "../../assets/image/about/building.svg";
 import { FaArrowRight, FaPaperPlane } from "react-icons/fa";
 
-const OurStory = () => {
+const OurStory = ({ scrollToMember, scrollToValues }: any) => {
   return (
     <div className="">
       <div className="p-36 flex w-full">
         <div className=" w-3/5 pr-12">
-          <button className="bg-orange-500 uppercase font-bold text-white py-2 px-4 rounded-lg flex items-center justify-center mb-14">
+          <button
+            onClick={scrollToMember}
+            className="bg-orange-500 uppercase font-bold text-white py-2 px-4 rounded-lg flex items-center justify-center mb-14"
+          >
             <FaPaperPlane className="mr-2" />
             GET TO KNOW US
           </button>
@@ -24,7 +27,10 @@ const OurStory = () => {
               last a lifetime. Our journey continues as we explore new
               destinations and create unique experiences for our community.
             </p>
-            <button className="bg-orange-500 uppercase font-bold text-white py-2 px-4 rounded-lg flex items-center justify-center">
+            <button
+              onClick={scrollToValues}
+              className="bg-orange-500 uppercase font-bold text-white py-2 px-4 rounded-lg flex items-center justify-center"
+            >
               Read more
               <FaArrowRight className="ml-2" />
             </button>
